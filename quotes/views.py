@@ -46,10 +46,13 @@ def show_all(request):
     '''
     Define a view to handle the 'show_all' request.
     '''
-
+    context = {
+        "quotes": quotes,
+        "images": images
+    }
     template_name = 'quotes/show_all.html'
     
-    return render(request, template_name)
+    return render(request, template_name, context)
     
 
 def about(request):

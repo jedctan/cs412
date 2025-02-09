@@ -3,6 +3,17 @@
 
 
     {% block content %}
-        <h1> Show All </h1>
+
+        <h1> All Quotes by Tom Holland </h1>
+        {% for quote in quotes %}
+            <li>{{ quote }}</li> <br>
+        {% endfor %}
+
+        <h1> All Images of Tom Holland</h1>
+        {% for image in images %}
+            <img src="/static/{{image}}" alt="Tom Holland" width="300"> <br>
+        {% endfor %}
+
+
     {% endblock %}
 
