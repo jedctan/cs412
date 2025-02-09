@@ -8,10 +8,20 @@
 
     <body>
 
+        <nav>
+            <li><a href="{% url 'home_quote' %}">Quote of the Day</a></li>
+            <li><a href="{% url 'show_all' %}">Show All</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+
+        </nav>
+
         {% block content %}
         {% endblock %}
 
-        <h1> Welcome to my website! </h1>
+        <footer>
+            Page created by jctan@bu.edu <br>
+            Generated at: {{time}}
+        </footer>
 
     </body>
 </html>
