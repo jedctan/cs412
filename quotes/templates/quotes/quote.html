@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 {% extends 'quotes/base.html' %}
-
+{% load static %}s
 
     {% block content %}
         <h1> Tom Holland Quote of the Day </h1>
+        <h2> {{rand_quote}} </h2>
+        <img src="/static/{{rand_image}}", width="500pt">
     {% endblock %}
 
