@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 {% extends 'quotes/base.html' %}
-
+{% load static %}
 
     {% block content %}
         <!-- For loops to display quotes and images -->
-         
+
         <h1> All Quotes by Tom Holland </h1>
         {% for quote in quotes %}
             <li>{{ quote }}</li> <br>
@@ -12,7 +12,7 @@
 
         <h1> All Images of Tom Holland</h1>
         {% for image in images %}
-            <img src="/static/{{image}}" alt="Tom Holland" width="300"> <br>
+            <img src="{% static image%}" alt="Tom Holland" width="300"> <br>
         {% endfor %}
 
 
