@@ -10,7 +10,7 @@ quotes = ["I feel like if you put something out into the universe, then you incr
           "I feel like I've been playing Spider-Man my whole life. He's a character I've been pretending to be in my bedroom since I was a kid - so I've been preparing for this forever, I think."
           ]
 
-images = ['tom1.jpg', 'tom2.jpg', 'tom3.jpg']
+images = ['quotes/tom1.jpg', 'quotes/tom2.jpg', 'quotes/tom3.jpg']
 
 # Create your views here.
 
