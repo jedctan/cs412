@@ -1,0 +1,47 @@
+body {
+    background-color: white;
+    color: darkolivegreen;
+    font-family: 'Trebuchet MS';
+}
+
+h1,h2,h3,h4,h5{
+    font-weight: normal;
+    background:lightgrey;
+    margin: 0;
+}
+
+a, a:visited {
+    color: darkolivegreen;
+    text-decoration: none;
+}
+
+a:hover {
+    color: green;
+    text-decoration: none;
+    background-color: white;
+    /* font-weight: bold; */
+}
+
+body {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 20px auto;
+}
+
+footer {
+    margin-top: 30pt;
+    width: 100%;
+    bottom: 0px;
+}
+
+nav {
+    justify-self: end;
+    background: none;
+    color: darkolivegreen;
+    /* border: 1px solid; */
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 20px;
+}
