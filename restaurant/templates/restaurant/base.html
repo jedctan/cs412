@@ -4,22 +4,25 @@
     <head>
         <title>Jed Nuggets</title>
 
-        <!-- <link rel="stylesheet" href="{% static 'styles.css' %}"> -->
+        <link rel="stylesheet" href="{% static 'restaurant/styles.css' %}">
     </head>
     <body>
     <header>
-        <h1>JED NUGGETS</h1>
         <nav>
             <a href="{% url 'main_page' %}">Main Page</a> |
             <a href="{% url 'order' %}">Order Page</a>
         </nav>
+        <h1>JED NUGGETS</h1>
+
     </header>
         
     {% block content %}
     {% endblock %}
     
-    <!-- <hr>
-    The current time is {{current_time}}. -->
+    <footer>
+        Page created by jctan@bu.edu <br>
+        Generated at: {{time}}
+    </footer>
 
     </body>
 </html>

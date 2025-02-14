@@ -7,7 +7,10 @@ import random
 def main(request):
     '''Function to show the main page of the website to describe the restaurant.'''
     template_name = "restaurant/main.html" # template that contains the main page HTML file
-    return render(request, template_name) # renders the HTML file using the HTTP request and the specified template
+    context = {
+        "time": time.ctime(),
+    }
+    return render(request, template_name, context) # renders the HTML file using the HTTP request and the specified template
 
 
 def order(request):
@@ -22,7 +25,8 @@ def order(request):
 
     # daily special item that is supplied at run time
     context = {
-        "daily_special" : daily_special_list[random_choice]
+        "daily_special" : daily_special_list[random_choice],
+        "time": time.ctime(),
     }
 
     return render(request, template_name, context) # renders the HTML file using the HTTP request and the specified template
@@ -89,8 +93,9 @@ def confirmation(request):
             "special_instructions": special_instructions,
             "nuggets": nuggets,
             "sauces": sauces,
-            "time": readytime,
+            "readytime": readytime,
             "price": price,
+            "time": time.ctime(),
         }
 
     return render(request, template_name, context=context)
