@@ -2,10 +2,18 @@
 {% load static %}
 <html>
     <head>
-        <title>Hello, world!</title>
+        <title>Jed Nuggets</title>
+
         <!-- <link rel="stylesheet" href="{% static 'styles.css' %}"> -->
     </head>
     <body>
+    <header>
+        <h1>JED NUGGETS</h1>
+        <nav>
+            <a href="{% url 'main_page' %}">Main Page</a> |
+            <a href="{% url 'order' %}">Order Page</a>
+        </nav>
+    </header>
         
     {% block content %}
     {% endblock %}

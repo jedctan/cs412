@@ -2,16 +2,92 @@
 
 {% block content %}
 <div>
-<h1>Contact Form</h1>
 
 <!-- by specifying the action we are saying that we want to handle this submit using the submit function -->
 <!-- we use the post method so that it isn't a GET method which is the default, and puts our submitted info into the url-->
 <form action="{% url 'confirmation' %}" method="POST">
     <!-- Django tries to prevent CSRF, so add the token here to avoid error 403 -->
     {% csrf_token %}
-    Name: <input type="text" name="name">
-    Favorite color: <input type="text" name="favorite_color">
+    <h2>Place an Order</h2>
+    
+    <h3>Select your items:</h3>
+    <table>
+        <tr>
+            <td><input type="checkbox" name="nugget4" value="nugget4"></td>
+            <td>4 Piece Nugget</td>
+            <td>$5</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" name="nugget8" value="nugget8"></td>
+            <td>8 Piece Nugget</td>
+            <td>$10</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" name="nugget100" value="nugget100"></td>
+            <td>100 Piece Nugget</td>
+            <td>$50</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" name="nugget2000" value="nugget2000"></td>
+            <td>2000 Piece Nugget</td>
+            <td>$1000</td>
+        </tr>
+    </table>
+    <h3>Select your sauces:</h3>
+    <table>
+        <tr>
+            <td><input type="checkbox" name="honeymustard" value="honeymustard"></td>
+            <td>Honey Mustard</td>
+            <td>$5</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" name="ketchup" value="ketchup"></td>
+            <td>Ketchup</td>
+            <td>$5</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" name="bbq" value="bbq"></td>
+            <td>BBQ</td>
+            <td>$5</td>
+        </tr>
+        <tr>
+            <td><input type="checkbox" name="ranch" value="ranch"></td>
+            <td>Ranch</td>
+            <td>$1000</td>
+        </tr>
+    </table>
+    
+    <h3>Daily Special</h3>
+    <table>
+        <tr>
+            <td><input type="checkbox" name="dailyspecial" value={{daily_special}}></td>
+            <td>{{daily_special}} Sauce</td>
+            <td>$5000</td>
+        </tr>
+    </table>
+    
+    <h3>Special Instructions</h3>
+    <textarea name="special_instructions" rows="3" cols="60"></textarea>
+    
+    <h3>Customer Information</h3>
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td><input name="name"></td>
+        </tr>
+        <tr>
+            <td>Phone:</td>
+            <td><input name="phone"></td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td><input name="email"></td>
+        </tr>
+    </table>
+    
+    <h3>Place your order!</h3>
     <input type="submit">
+    
 
 </form>
 

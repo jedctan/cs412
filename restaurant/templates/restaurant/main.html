@@ -1,5 +1,30 @@
 {% extends 'restaurant/base.html' %}
 
 {% block content %}
-<h1>Main Page</h1>
+{% load static %}
+
+<h1>Welcome!</h1>
+<h3>📍 Location:</h3>
+<p>52 Ashford St Allston, MA</p>
+<img src="{% static 'restaurant/restaurant.jpg' %}" height="400pt">
+<h3>Hours of Operation:</h3>
+<table>
+    <tr>
+        <th>Day</th>
+        <th>Hours</th>
+    </tr>
+    <tr>
+        <td>Mon - Fri</td>
+        <td>8 AM - 11 PM</td>
+    </tr>
+    <tr>
+        <td>Sat</td>
+        <td>Closed</td>
+    </tr>
+    <tr>
+        <td>Sun</td>
+        <td>11 AM - 8 PM</td>
+    </tr>
+</table>
+
 {% endblock %}
