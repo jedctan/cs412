@@ -1,3 +1,15 @@
+
+/*
+File: styles.css
+Description: Adds styling to the HTML files: base.html, confirmation.html, main.html, order.html
+Author: Jed Tan
+Email: jctan@bu.edu
+Phone number: 919-619-1528
+Year and major: Senior Computer Science
+Date Created: 2025-02-11
+Last Modified: 2025-02-14
+*/
+
 body {
     background-color: white;
     color: darkred;
@@ -14,7 +26,6 @@ nav {
     justify-self: left;
     color: darksalmon;
     background-color: none;
-    /* border: 1px solid; */
 }
 
 nav li {
@@ -31,7 +42,6 @@ a:hover {
     color: darksalmon;
     text-decoration: none;
     background-color: white;
-    /* font-weight: bold; */
 }
 
 

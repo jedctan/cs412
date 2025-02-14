@@ -1,15 +1,26 @@
-from django.shortcuts import render
-import time
-import random
+"""
+File: views.py
+Description: Handles the restaurant website views, including order processing and confirmation.
+Author: Jed Tan
+Email: jctan@bu.edu
+Phone number: 919-619-1528
+Year and major: Senior Computer Science
+Date Created: 2025-02-11
+Last Modified: 2025-02-14
+"""
 
-# Create your views here.
+
+from django.shortcuts import render # render function used to render HTML templates
+import time # time module used to generate timestamps for footer and order completion time
+import random # random module used to randomly select daily special and time to completion
+
 
 def main(request):
     '''Function to show the main page of the website to describe the restaurant.'''
     template_name = "restaurant/main.html" # template that contains the main page HTML file
     context = {
-        "time": time.ctime(),
-    }
+        "time": time.ctime(), # time needed for the footer time generated component
+    } 
     return render(request, template_name, context) # renders the HTML file using the HTTP request and the specified template
 
 
@@ -50,11 +61,14 @@ def confirmation(request):
         random_period = random.randint(30,60) * 60 # random 30-60 minute period in seconds
         readytime = time.ctime(current_time + random_period) # add times and format into readable form
 
+        # lists of what the user ordered that will be passed to the HTML template to be displayed in the confirmation screen
         nuggets = []
         sauces = []
-        price = 0
-        print(request.POST)
 
+        # price accumulator
+        price = 0 
+
+        # check what type of nuggets the user ordered and add the price of each to the total price
         if "nugget4" in request.POST:
             nuggets.append("4 Piece Nugget - $5")
             price += 5
@@ -68,6 +82,7 @@ def confirmation(request):
             nuggets.append("2000 Piece Nugget - $1000")
             price += 1000
         
+        # check what type of sauces the user ordered and add the price of each to the total price
         if "honeymustard" in request.POST:
             sauces.append("Honey Mustard")
             price += 5
@@ -84,7 +99,6 @@ def confirmation(request):
             sauces.append(request.POST["dailyspecial"] + " Sauce")
             price += 5000
 
-        print(sauces)
 
         context = {
             "name": name,
@@ -98,6 +112,6 @@ def confirmation(request):
             "time": time.ctime(),
         }
 
-    return render(request, template_name, context=context)
+    return render(request, template_name, context=context) # renders the HTML file using the HTTP request and the specified template
 
 
