@@ -21,3 +21,6 @@ class Profile(models.Model):
     email = models.EmailField(blank=False)
     profile_img_url = models.URLField(blank=False)
 
+    def __str__(self):
+        '''Return a string representation of this Profile object.'''
+        return f'{self.first_name} {self.last_name}'
