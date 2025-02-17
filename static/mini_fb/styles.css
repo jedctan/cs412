@@ -1,0 +1,67 @@
+
+/*
+File: styles.css
+Description: 
+Author: Jed Tan
+Email: jctan@bu.edu
+Phone number: 919-619-1528
+Year and major: Senior Computer Science
+Date Created: 2025-02-16
+Last Modified: 2025-02-16
+*/
+
+body {
+    background-color: powderblue;
+    color: darkcyan;
+    font-family: 'Trebuchet MS';
+}
+
+table {
+    font-size: 18px;
+    text-align: left;
+}
+
+td {
+    padding: 5pt;
+}
+
+nav {
+    justify-self: right;
+    background-color: none;
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+a, a:visited {
+    color: darkcyan;
+    text-decoration: none;
+}
+
+a:hover {
+    color: darkslategrey;
+    text-decoration: none;
+}
+
+
+h1,h2,h3,h4,h5{
+    font-weight: normal;
+    margin: 0;
+    background-color:darkslategray;
+}
+
+
+body {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 20px auto;
+}
+
+footer {
+    margin-top: 30pt;
+    width: 100%;
+    bottom: 0px;
+}
+
