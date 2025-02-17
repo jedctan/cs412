@@ -1,22 +1,34 @@
+<!--
+File: show_all_profiles.html
+Description: Displays all profiles from database on one page.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-02-16
+Last Modified: 2025-02-16
+-->
+
 {% extends 'mini_fb/base.html' %}
 
 {% block content %}
 
 
-    <div>
+    <main>
         <h2>Show all profiles</h2>
         <table>
+            <!-- loop thru all profiles to display each in a row of a table -->
+            <!-- links embedded into the names and the profile pics for their individual show_profile page -->
             {% for profile in profiles %}
             <tr>
-                <td>{{profile.first_name}} {{profile.last_name}}</td>
+                <td> <a href="{% url 'show_profile' profile.pk%}">{{profile.first_name}} {{profile.last_name}}</a></td>
                 <td>{{profile.city}}</td>
                 <td>{{profile.email}}</td>
-                <td> <img src="{{profile.profile_img_url}}" alt="" height="80px"></td>
+                <td> <a href="{% url 'show_profile' profile.pk%}"><img src="{{profile.profile_img_url}}" alt="" height="200px"></a></td>
+                
             </tr>
 
             {% endfor %}
         </table>
 
-    <div>
+    <main>
 
 {% endblock %}

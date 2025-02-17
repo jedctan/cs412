@@ -19,10 +19,15 @@ body {
 table {
     font-size: 18px;
     text-align: left;
+    border-collapse: collapse;
+
 }
 
-td {
+tr, td {
     padding: 5pt;
+    border: 2px solid darkcyan;
+
+
 }
 
 nav {
@@ -46,7 +51,7 @@ a:hover {
 }
 
 
-h1,h2,h3,h4,h5{
+h1,h3,h4,h5{
     font-weight: normal;
     margin: 0;
     background-color:darkslategray;

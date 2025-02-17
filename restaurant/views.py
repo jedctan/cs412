@@ -3,8 +3,6 @@ File: views.py
 Description: Handles the restaurant website views, including order processing and confirmation.
 Author: Jed Tan
 Email: jctan@bu.edu
-Phone number: 919-619-1528
-Year and major: Senior Computer Science
 Date Created: 2025-02-11
 Last Modified: 2025-02-14
 """

@@ -1,6 +1,6 @@
 '''
 File: models.py
-Description: Define data models for Facebook clone.
+Description: Define data models for Facebook web app.
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-02-16
@@ -17,7 +17,6 @@ class Profile(models.Model):
     first_name = models.TextField(blank=False)
     last_name = models.TextField(blank=False)
     city = models.TextField(blank=False)
-
     email = models.EmailField(blank=False)
     profile_img_url = models.URLField(blank=False)
 
