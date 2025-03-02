@@ -4,9 +4,10 @@ Description: Define data models for Facebook web app.
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-02-16
-Last Modified: 2025-02-16
+Last Modified: 2025-03-02
 '''
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -23,3 +24,24 @@ class Profile(models.Model):
     def __str__(self):
         '''Return a string representation of this Profile object.'''
         return f'{self.first_name} {self.last_name}'
+    
+    def get_absolute_url(self):
+        '''Return a URL to display one instance of this object.'''
+        # utilize reverse function to look up URL for show_profile and index using primary key to get the correct URL
+        return reverse('show_profile', kwargs={'pk': self.pk})
+
+
+    
+class StatusMessage(models.Model):
+    '''Encapsulate the data for each created status message.'''
+
+    # automatically set the field to now everytime the object is saved
+    timestamp = models.DateTimeField(auto_now=True)
+    message = models.TimeField(blank=False)
+    # profile = models.ForeignKey(blank=False)
+
+    def __str__(self):
+        '''Return a string representation of this message object'''
+        return f'{self.message}'
+
+    

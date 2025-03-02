@@ -1,10 +1,10 @@
 <!--
 File: base.html
-Description: Adds styling to the HTML files: show_all_profiles.html, show_profile.html
+Description: Provides a base for all other HTML files with style information, a header, nav bar, and a footer
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-02-16
-Last Modified: 2025-02-16
+Last Modified: 2025-03-02s
 -->
 
 {% load static %}
@@ -18,8 +18,9 @@ Last Modified: 2025-02-16
         <header>
 
             <nav>
-                <a href="{% url 'show_all_profiles' %}">Home</a>
-                <a href="">About</a>
+                <a href="{% url 'show_all_profiles' %}">Home</a> |
+                <a href="{% url 'create_profile' %}">Create Profile</a>
+
             </nav>
             <h1>Mini Facebook</h1>
 

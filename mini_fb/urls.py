@@ -8,10 +8,11 @@ Last Modified: 2025-02-16
 '''
 
 from django.urls import path
-from .views import ShowAllProfileViews, ShowProfilePageView # our view class definition 
+from .views import *
 
 urlpatterns = [
     path('', ShowAllProfileViews.as_view(), name="show_all_profiles"),
-    path('profile/<int:pk>', ShowProfilePageView.as_view() , name="show_profile")
+    path('profile/<int:pk>', ShowProfilePageView.as_view() , name="show_profile"),
+    path('create_profile', CreateProfileView.as_view(), name="create_profile")
 
 ]
