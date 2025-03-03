@@ -1,11 +1,11 @@
 
 /*
 File: styles.css
-Description: 
+Description: Provides styling to all HTML files in mini_fb.
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-02-16
-Last Modified: 2025-02-16
+Last Modified: 2025-03-02
 */
 
 body {
@@ -39,12 +39,39 @@ nav li {
 }
 
 a, a:visited {
-    color: darkcyan;
+    color: darkslategray;
     text-decoration: none;
+    background-color: transparent;
+    display: inline-block;
+    border: 2px solid darkslategray;
+    margin-top: 10px;
+    padding: 2px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+
 }
 
 a:hover {
-    color: darkslategrey;
+    background-color: darkslategray;
+    color: white;
+    text-decoration: none;
+}
+
+input[type="submit"] {
+    color: darkslategray;
+    text-decoration: none;
+    background-color: transparent;
+    display: inline-block;
+    border: 2px solid darkslategray;
+    padding: 4px;
+    margin-top: 5px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+input[type="submit"]:hover {
+    background-color: darkslategray;
+    color: white;
     text-decoration: none;
 }
 

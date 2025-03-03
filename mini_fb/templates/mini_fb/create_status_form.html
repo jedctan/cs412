@@ -1,0 +1,30 @@
+<!--
+File: create_status_form.html
+Description: Template used to render the form shown to users for status message creation.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-03-02
+Last Modified: 2025-03-02
+-->
+
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+    <h1>Create a new status message for {{profile.first_name}} {{profile.last_name}}</h1>
+    <form method="POST">
+
+        {% csrf_token %}
+        
+        <table>
+            {{form.as_table}}
+        </table>
+
+
+        <input type="submit" name="submit" value="Submit"> <br>
+        <a href="{% url 'show_profile' profile.pk %}">Cancel</a>
+
+    </form>
+
+
+{% endblock %}
+

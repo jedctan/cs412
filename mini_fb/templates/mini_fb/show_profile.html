@@ -18,6 +18,21 @@ Last Modified: 2025-02-16
             <tr><img src="{{profile.profile_img_url}}" alt="" height="500px"></tr>
             <tr><li>{{profile.city}}</li></tr>
             <tr><li>{{profile.email}}</li></tr>
+
+            <!-- Display all status messages for this profile -->
+             <br>
+             <h3>{{profile.first_name}}'s status messages</h3>
+             <a href="{% url 'create_status' profile.pk %}">Create Status Message</a>
+             <!-- for loop to display all status messages for this profile -->
+             {% for status_message in profile.get_status_messages %}
+             <div>
+                <p>
+                    <strong>{{status_message.message}}</strong> <i>at {{status_message.timestamp}}</i>
+                </p>
+             </div>
+
+             {% endfor %}
+
         </table>
 
     <main>
