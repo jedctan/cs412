@@ -9,7 +9,7 @@ Last Modified: 2025-03-02
 
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
-from .models import Profile
+from .models import Profile, Image, StatusImage
 from .forms import CreateProfileForm, CreateStatusMessageForm
 from django.urls import reverse # allows us to create a URL from a URL pattern name
 
@@ -75,12 +75,33 @@ class CreateStatusMessageView(CreateView):
         We need to add the foreign key of the Profile to the status message before adding it to the db.
         '''
 
+        # PRIMARY KEY HANDLING
+
         # get the primary key from the URL pattern
         pk = self.kwargs['pk']
         profile = Profile.objects.get(pk=pk)
 
         # attach this profile to the status message
         form.instance.profile = profile
+
+        # STATUSIMAGE HANDLING
+
+        # save the status message to database
+        sm = form.save() # StatusMessage object
+
+        # read the file from the form:
+        files = self.request.FILES.getlist('files')
+
+        # loop thru inputted files
+        for file in files:
+
+            # create Image object and save to DB
+            img = Image(profile=profile, image_file=file)
+            img.save()
+
+            # create StatusImage object and save to DB
+            status_img = StatusImage(image=img, status_message=sm)
+            status_img.save() 
 
         # delegate work to the superclass method form_valid
         return super().form_valid(form)
