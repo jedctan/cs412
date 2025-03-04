@@ -4,13 +4,13 @@ Description: Handles the Facebook web app views, including showing all the profi
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-02-16
-Last Modified: 2025-03-02
+Last Modified: 2025-03-04
 '''
 
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Profile, Image, StatusImage
-from .forms import CreateProfileForm, CreateStatusMessageForm
+from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm
 from django.urls import reverse # allows us to create a URL from a URL pattern name
 
 class ShowAllProfileViews(ListView):
@@ -105,4 +105,11 @@ class CreateStatusMessageView(CreateView):
 
         # delegate work to the superclass method form_valid
         return super().form_valid(form)
+    
+class UpdateProfileView(UpdateView):
+    '''View class to handle update of a Profile based on its PK.'''
+
+    model = Profile
+    form_class = UpdateProfileForm
+    template_name = 'mini_fb/update_profile_form.html'
         

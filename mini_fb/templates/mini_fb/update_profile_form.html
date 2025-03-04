@@ -1,0 +1,31 @@
+<!--
+File: update_profile_form.html
+Description: Template used to update Profile object.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-03-04
+Last Modified: 2025-03-04
+-->
+
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+    <h1>Create a new profile</h1>
+    <!-- action is for where we send the inputted data after submission, so we send it back to CreateProfilView using the url function -->
+    <form action="{% url 'update_profile' profile.pk %}" method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <table>
+            {{form.as_table}}
+        </table>
+
+
+        <input type="submit" name="submit" value="Update"> <br>
+        <a href="{% url 'show_profile' profile.pk %}">Cancel</a>
+
+    </form>
+
+
+{% endblock %}
+

@@ -29,6 +29,7 @@ Last Modified: 2025-02-16
             <!-- Display all status messages for this profile -->
              <br>
              <h3>{{profile.first_name}}'s status messages</h3>
+             <a href="{% url 'update_profile' profile.pk %}">Update Profile</a> |
              <a href="{% url 'create_status' profile.pk %}">Create Status Message</a>
              <!-- for loop to display all status messages for this profile -->
              {% for status in profile.get_status_messages %}

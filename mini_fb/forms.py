@@ -4,7 +4,7 @@ Description: Defines forms for creating and managing Profile and StatusMessage o
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-03-02
-Last Modified: 2025-03-02
+Last Modified: 2025-03-04
 '''
 
 from django import forms
@@ -26,3 +26,13 @@ class CreateStatusMessageForm(forms.ModelForm):
         '''Associate this form with the StatusMessage model from our database.'''
         model = StatusMessage
         fields = ['message']
+
+
+class UpdateProfileForm(forms.ModelForm):
+    '''A form to handle updating an Profile.'''
+
+    class Meta:
+        '''Associate this form with a Profile.'''
+        model = Profile
+        # fields we can update
+        fields = ['city', 'email', 'image_file']
