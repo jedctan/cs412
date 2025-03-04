@@ -1,6 +1,6 @@
 <!--
-File: update_profile_form.html
-Description: Template used to update Profile object.
+File: update_status_form.html
+Description: Template used to update StatusMessage object.
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-03-04
@@ -12,7 +12,7 @@ Last Modified: 2025-03-04
 {% block content %}
     <h1>Create a new profile</h1>
     <!-- action is for where we send the inputted data after submission, so we send it back to CreateProfileView using the url function -->
-    <form action="{% url 'update_profile' profile.pk %}" method="POST" enctype="multipart/form-data">
+    <form action="{% url 'update_status' statusmessage.pk %}" method="POST" enctype="multipart/form-data">
 
         {% csrf_token %}
 
@@ -22,7 +22,7 @@ Last Modified: 2025-03-04
 
 
         <input type="submit" name="submit" value="Update"> <br>
-        <form action="{% url 'show_profile' profile.pk %}" method="GET">
+        <form action="{% url 'show_profile' statusmessage.profile.pk %}" method="GET">
             <input type="submit" value="Cancel">
         </form>
 

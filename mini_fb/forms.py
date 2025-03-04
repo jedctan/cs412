@@ -36,3 +36,12 @@ class UpdateProfileForm(forms.ModelForm):
         model = Profile
         # fields we can update
         fields = ['city', 'email', 'image_file']
+
+class UpdateStatusForm(forms.ModelForm):
+    '''A form to handle updating a StatusMEssage.'''
+
+    class Meta:
+        '''Associate this form with a StatusMessage.'''
+        model = StatusMessage
+        # fields we can update
+        fields = ['message']

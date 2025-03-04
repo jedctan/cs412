@@ -29,7 +29,7 @@ Last Modified: 2025-02-16
             <!-- Display all status messages for this profile -->
              <br>
              <h3>{{profile.first_name}}'s status messages</h3>
-             <a href="{% url 'update_profile' profile.pk %}">Update Profile</a> |
+             <a href="{% url 'update_profile' profile.pk %}">Update Profile</a> | 
              <a href="{% url 'create_status' profile.pk %}">Create Status Message</a>
              <!-- for loop to display all status messages for this profile -->
              {% for status in profile.get_status_messages %}
@@ -41,8 +41,13 @@ Last Modified: 2025-02-16
                     <!-- get the Image objects -->
                     {% for img in status.get_images %}
                     <img src='{{img.image_file.url}}' alt='{{img.image_file.url}}' height="200px">
+                    <!-- link to delete comments -->
                     {% endfor %}
+                    <br>
+                    <a href="{% url 'delete_status' status.pk %}"> Delete</a>
 
+                    <!-- link to update comments -->
+                     | <a href="{% url 'update_status' status.pk %}"> Update</a>
                 </p>
              </div>
 

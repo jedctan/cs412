@@ -1,0 +1,28 @@
+<!--
+File: delete_status_form.html
+Description: Template used to confirm deletion of status message.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-03-04
+Last Modified: 2025-03-04
+-->
+
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+    <h3>Are you sure you want to delete this status message?</h3>
+    <p>{{statusmessage}}</p>
+
+    <!-- form to delete request -->
+    <form method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Yes">
+    </form>
+
+    <form action="{% url 'delete_status' statusmessage.profile.pk %}" method="GET">
+        {% csrf_token %}
+        <input type="submit" value="No">
+    </form>
+
+{% endblock %}
+

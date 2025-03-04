@@ -54,12 +54,16 @@ class StatusMessage(models.Model):
         '''Return a string representation of this status message.'''
         return f'{self.message}'
     
+    def get_absolute_url(self):
+        '''Return a URL to display one instance of this object.'''
+        # utilize reverse function to look up URL for show_profile and index using primary key to get the correct URL
+        return reverse('show_profile', kwargs={'pk': self.profile.pk})
+
     def get_images(self):
         '''Return all images associated with this status message.'''
         status_images = StatusImage.objects.filter(status_message=self)  # Get all StatusImage objects
-        return [si.image for si in status_images]
+        return [si.image for si in status_images] # Return just the Image objects
         
-
 
 class Image(models.Model):
     '''Encapsulates the image file.'''

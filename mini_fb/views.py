@@ -8,9 +8,9 @@ Last Modified: 2025-03-04
 '''
 
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from .models import Profile, Image, StatusImage
-from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .models import Profile, Image, StatusImage, StatusMessage
+from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateStatusForm
 from django.urls import reverse # allows us to create a URL from a URL pattern name
 
 class ShowAllProfileViews(ListView):
@@ -113,3 +113,31 @@ class UpdateProfileView(UpdateView):
     form_class = UpdateProfileForm
     template_name = 'mini_fb/update_profile_form.html'
         
+class DeleteStatusMessageView(DeleteView):
+    '''View class to delete a status message on a Profile.'''
+
+    model = StatusMessage
+    template_name = 'mini_fb/delete_status_form.html'
+
+    def get_success_url(self):
+        '''Return the URL to redirect to after a successful deletion.'''
+
+        # find PK of the status messaage
+        pk = self.kwargs['pk']
+
+        # find status message
+        status_message = StatusMessage.objects.get(pk=pk)
+
+        # find the PK for the profile that the status message is associated with
+        profile = status_message.profile
+
+        return reverse('show_profile', kwargs={'pk':profile.pk})
+
+class UpdateStatusMessageView(UpdateView):
+    '''View class to handle update of a status message of a Profile.'''
+
+    model = StatusMessage
+    form_class = UpdateStatusForm
+    template_name = 'mini_fb/update_status_form.html'
+
+    
