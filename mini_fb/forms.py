@@ -1,6 +1,6 @@
 '''
 File: forms.py
-Description: Define forms 
+Description: Defines forms for creating and managing Profile and StatusMessage objects in the database.
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-03-02
@@ -16,7 +16,7 @@ class CreateProfileForm(forms.ModelForm):
     class Meta:
         '''Associate this form with the Profile model from our database'''
         model = Profile
-        fields = ['first_name', 'last_name', 'city', 'email', 'profile_img_url']
+        fields = ['first_name', 'last_name', 'city', 'email', 'image_file']
 
 
 class CreateStatusMessageForm(forms.ModelForm):

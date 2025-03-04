@@ -4,7 +4,7 @@ Description: Define data models for Facebook web app.
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-02-16
-Last Modified: 2025-03-02
+Last Modified: 2025-03-04
 '''
 from django.db import models
 from django.urls import reverse
@@ -19,7 +19,8 @@ class Profile(models.Model):
     last_name = models.TextField(blank=False)
     city = models.TextField(blank=False)
     email = models.EmailField(blank=False)
-    profile_img_url = models.URLField(blank=False)
+    # profile_img_url = models.URLField(blank=False)
+    image_file = models.ImageField(blank=True) # profile pic not required
 
     def __str__(self):
         '''Return a string representation of this Profile object.'''
@@ -49,9 +50,26 @@ class StatusMessage(models.Model):
     # cascade delete: if a profile is deleted all status messages associated with it are deleted as well
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
-
     def __str__(self):
-        '''Return a string representation of this message object.'''
+        '''Return a string representation of this status message.'''
         return f'{self.message}'
-
     
+    def get_images(self):
+        '''Return all images associated with this status message.'''
+        status_images = StatusImage.objects.filter(status_message=self)  # Get all StatusImage objects
+        return [si.image for si in status_images]
+        
+
+
+class Image(models.Model):
+    '''Encapsulates the image file.'''
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    image_file = models.ImageField(blank=True)
+    timestamp = models.DateTimeField(auto_now=True)
+    # optional caption field
+    caption = models.TextField(blank=True)
+
+class StatusImage(models.Model):
+    '''Encapsulates the relationship between images that are associated with a Profile and StatusMessage.'''
+    image = models.ForeignKey(Image, on_delete=models.CASCADE, null=True)
+    status_message = models.ForeignKey(StatusMessage, on_delete=models.CASCADE)

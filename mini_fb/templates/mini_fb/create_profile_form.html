@@ -12,7 +12,7 @@ Last Modified: 2025-03-02
 {% block content %}
     <h1>Create a new profile</h1>
     <!-- action is for where we send the inputted data after submission, so we send it back to CreateProfilView using the url function -->
-    <form action="{% url 'create_profile' %}" method="POST">
+    <form action="{% url 'create_profile' %}" method="POST" enctype="multipart/form-data">
 
         {% csrf_token %}
 

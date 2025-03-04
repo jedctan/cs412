@@ -15,7 +15,14 @@ Last Modified: 2025-02-16
     <main>
         <h2>{{profile.first_name}} {{profile.last_name}}</h2>
         <table>
-            <tr><img src="{{profile.profile_img_url}}" alt="" height="500px"></tr>
+
+            <tr>
+                {% if profile.image_file %}
+                <img src="{{profile.image_file.url}}" alt="" height="500px">
+                {% else %}
+                <h3>No image</h3>
+                {% endif %}
+            </tr>
             <tr><li>{{profile.city}}</li></tr>
             <tr><li>{{profile.email}}</li></tr>
 
@@ -24,10 +31,17 @@ Last Modified: 2025-02-16
              <h3>{{profile.first_name}}'s status messages</h3>
              <a href="{% url 'create_status' profile.pk %}">Create Status Message</a>
              <!-- for loop to display all status messages for this profile -->
-             {% for status_message in profile.get_status_messages %}
+             {% for status in profile.get_status_messages %}
              <div>
                 <p>
-                    <strong>{{status_message.message}}</strong> <i>at {{status_message.timestamp}}</i>
+                    <strong>{{status.message}}</strong> <i>at {{status.timestamp}}</i>
+                    <br>
+                    
+                    <!-- get the Image objects -->
+                    {% for img in status.get_images %}
+                    <img src='{{img.image_file.url}}' alt='{{img.image_file.url}}' height="200px">
+                    {% endfor %}
+
                 </p>
              </div>
 
