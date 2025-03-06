@@ -1,0 +1,97 @@
+
+/*
+File: styles.css
+Description: Provides styling to all HTML files in mini_fb.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-02-16
+Last Modified: 2025-03-02
+*/
+
+body {
+    background-color: powderblue;
+    color: darkcyan;
+    font-family: 'Trebuchet MS';
+}
+
+table {
+    font-size: 18px;
+    text-align: left;
+    border-collapse: collapse;
+
+}
+
+tr, td {
+    padding: 5pt;
+    border: 2px solid darkcyan;
+
+
+}
+
+nav {
+    justify-self: right;
+    background-color: none;
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+a, a:visited {
+    color: darkslategray;
+    text-decoration: none;
+    background-color: transparent;
+    display: inline-block;
+    border: 2px solid darkslategray;
+    margin-top: 10px;
+    padding: 2px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+
+}
+
+a:hover {
+    background-color: darkslategray;
+    color: white;
+    text-decoration: none;
+}
+
+input[type="submit"] {
+    color: darkslategray;
+    text-decoration: none;
+    background-color: transparent;
+    display: inline-block;
+    border: 2px solid darkslategray;
+    padding: 4px;
+    margin-top: 5px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+input[type="submit"]:hover {
+    background-color: darkslategray;
+    color: white;
+    text-decoration: none;
+}
+
+
+h1,h3,h4,h5{
+    font-weight: normal;
+    margin: 0;
+    background-color:darkslategray;
+}
+
+
+body {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 20px auto;
+}
+
+footer {
+    margin-top: 30pt;
+    width: 100%;
+    bottom: 0px;
+}
+
