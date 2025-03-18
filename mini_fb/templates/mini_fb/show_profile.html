@@ -4,7 +4,7 @@ Description: Displays single profile.
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-02-16
-Last Modified: 2025-02-16
+Last Modified: 2025-03-18
 -->
 
 {% extends 'mini_fb/base.html' %}
@@ -52,6 +52,23 @@ Last Modified: 2025-02-16
              </div>
 
              {% endfor %}
+
+             <!-- Display all of the friends for this profile -->
+             <div>
+                <h3>{{profile.first_name}}'s friends</h3>
+                <table>
+                    <!-- for loop thru the list of friends (profiles) that get_friends() returns -->
+                    {% for friend in profile.get_friends %}
+                        <td>
+                            {{friend.first_name}} {{friend.last_name}} <br>
+                            <a href="{% url 'show_profile' friend.pk%}">
+                                <img src="{{friend.image_file.url}}" height="200px">
+                            </a>
+                        </td>
+                    {% endfor %}
+                </table>
+
+             </div>
 
         </table>
 

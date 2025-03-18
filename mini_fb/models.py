@@ -4,7 +4,7 @@ Description: Define data models for Facebook web app.
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-02-16
-Last Modified: 2025-03-04
+Last Modified: 2025-03-18
 '''
 from django.db import models
 from django.urls import reverse
@@ -37,6 +37,26 @@ class Profile(models.Model):
         # match the foreign key of profile to self (instance of type Profile) and order by the timestamp
         status_messages = StatusMessage.objects.filter(profile=self).order_by('timestamp')
         return status_messages
+    
+    
+    def get_friends(self):
+        '''Return a list of all the friends for this profile'''
+
+        # get all of the friends objects that have this profile in either profile1 or profile2
+        friends1 = Friend.objects.filter(profile1=self)
+        friends2 = Friend.objects.filter(profile2=self)
+
+        result_list = []
+
+        # for all friend relationships where this profile is in profile1, retrieve profile2
+        for i in friends1:
+            result_list.append(i.profile2)
+        
+        # for all friend relationships where this profile is in profile2, retrieve profile1
+        for j in friends2:
+            result_list.append(j.profile1)
+        
+        return result_list
     
 class StatusMessage(models.Model):
     '''Encapsulate the data for each created status message.'''
@@ -77,3 +97,14 @@ class StatusImage(models.Model):
     '''Encapsulates the relationship between images that are associated with a Profile and StatusMessage.'''
     image = models.ForeignKey(Image, on_delete=models.CASCADE, null=True)
     status_message = models.ForeignKey(StatusMessage, on_delete=models.CASCADE)
+
+
+class Friend(models.Model):
+    '''Encapsulates the idea of an edge connecting two nodes within the social network.'''
+    profile1 = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="profile1")
+    profile2 = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="profile2")
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        '''Return a string representation of this friend relationship.'''
+        return f'{self.profile1.first_name} {self.profile1.last_name} & {self.profile2.first_name} {self.profile2.last_name}'
