@@ -82,7 +82,7 @@ class Profile(models.Model):
         res = []
 
         for p in all_profiles:
-            if p not in current_friends:
+            if p not in current_friends and p != self:
                 res.append(p)
         
         return res
