@@ -1,0 +1,37 @@
+<!--
+File: friend_suggestions.html
+Description: Template used to display friend suggestions for a single profile.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-03-18
+Last Modified: 2025-03-21
+-->
+
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+
+<a href="{% url 'show_profile' profile.pk %}"> Back</a>
+
+<table>
+{% for person in profile.get_friend_suggestions %}
+    <td>    
+        <a href="{% url 'add_friend' profile.pk person.pk %}">Add friend</a>
+        <br>
+        <a href="{% url 'show_profile' person.pk%}">
+        {% if person.image_file %}
+        <img src="{{person.image_file.url}}" alt="" height="200px">
+        {% else %}
+        <h3>No image</h3>
+        {% endif %}
+        </a>
+        <br>
+        <a href="{% url 'show_profile' person.pk%}">{{person.first_name}} {{person.last_name}}</a>
+
+    </td>
+{% endfor %}
+</table>
+
+
+{% endblock %}
+

@@ -4,7 +4,7 @@ Description: Define data models for Facebook web app.
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-02-16
-Last Modified: 2025-03-18
+Last Modified: 2025-03-21
 '''
 from django.db import models
 from django.urls import reverse
@@ -40,7 +40,7 @@ class Profile(models.Model):
     
     
     def get_friends(self):
-        '''Return a list of all the friends for this profile'''
+        '''Return a list of all the friends for this profile.'''
 
         # get all of the friends objects that have this profile in either profile1 or profile2
         friends1 = Friend.objects.filter(profile1=self)
@@ -57,6 +57,50 @@ class Profile(models.Model):
             result_list.append(j.profile1)
         
         return result_list
+    
+    def add_friend(self, other):
+        '''Adds a friend relation for two profiles: self and other.'''
+        # test if this friend relation exists for profile1 + profile2 or profile2 + profile1
+        if self == other:
+            return False
+    
+        profile1_matches = Friend.objects.filter(profile1=self, profile2=other)
+        profile2_matches = Friend.objects.filter(profile1=other, profile2=self)
+
+        if profile1_matches or profile2_matches:
+            return False
+        else:
+            Friend.objects.create(profile1=self, profile2=other)
+            return True
+
+    def get_friend_suggestions(self):
+        '''Return a list of Friend suggestions for this Profile.'''
+
+        # find all profiles that are not in this Profile's friend list
+        all_profiles = Profile.objects.all() # QuerySet of all existing profiles
+        current_friends = self.get_friends() # list of profile objects
+        res = []
+
+        for p in all_profiles:
+            if p not in current_friends:
+                res.append(p)
+        
+        return res
+
+    def get_news_feed(self):
+        '''Return list of all StatusMessages for this Profile and all of its Friends.'''
+        
+        # List of friends of this profile
+        friends_list = Profile.get_friends(self)
+
+        # Add current profile to this list
+        friends_list.append(self)
+
+        # Filter through all status messages, based on if the profile is in this list
+        res = StatusMessage.objects.filter(profile__in=friends_list).order_by('-timestamp')
+
+        return res
+
     
 class StatusMessage(models.Model):
     '''Encapsulate the data for each created status message.'''

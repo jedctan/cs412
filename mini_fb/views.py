@@ -1,15 +1,15 @@
 '''
 File: views.py
-Description: Handles the Facebook web app views, including showing all the profiles at once, showing one at a time, creating profiles, and creating status messages.
+Description: Handles the Facebook web app views, including showing all the profiles at once, showing one at a time, creating profiles, creating status messages and adding/displaying friends.
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-02-16
-Last Modified: 2025-03-04
+Last Modified: 2025-03-18
 '''
 
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Profile, Image, StatusImage, StatusMessage
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
+from .models import Profile, Image, StatusImage, StatusMessage, Friend
 from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateStatusForm
 from django.urls import reverse # allows us to create a URL from a URL pattern name
 
@@ -63,7 +63,7 @@ class CreateStatusMessageView(CreateView):
         pk = self.kwargs['pk']
         profile = Profile.objects.get(pk=pk)
 
-        # add this profile into context data\
+        # add this profile into context data
         context["profile"] = profile
 
         return context
@@ -141,3 +141,30 @@ class UpdateStatusMessageView(UpdateView):
     template_name = 'mini_fb/update_status_form.html'
 
     
+class CreateFriendView(View):
+    '''View class to handle the creation of Friend relations.'''
+
+    def dispatch(self, request, *args, **kwargs):
+        
+        # from the request get the 2 primary keys
+        pk1 = self.kwargs['pk']
+        pk2 = self.kwargs['other_pk']
+
+        profile1 = Profile.objects.get(pk=pk1)
+        profile2 = Profile.objects.get(pk=pk2)
+
+        profile1.add_friend(profile2)
+        
+        return redirect(reverse('show_profile', kwargs={'pk': profile1.pk}))
+
+class ShowFriendSuggestionsView(DetailView):
+    '''View class to display all friend suggestions for a single profile.'''
+
+    model = Profile
+    template_name = 'mini_fb/friend_suggestions.html'
+
+class ShowNewsFeedView(DetailView):
+    '''View class to display a news feed containing all StatusMessages for a profile and its friends.'''
+
+    model = Profile
+    template_name = 'mini_fb/news_feed.html'

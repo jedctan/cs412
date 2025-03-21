@@ -1,0 +1,35 @@
+<!--
+File: news_feed.html
+Description: Template to display the news feed for a single Profile.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-03-21
+Last Modified: 2025-03-21
+-->
+
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+<a href="{% url 'show_profile' profile.pk%}">Back</a>
+
+{% for msg in profile.get_news_feed %}
+    <div class="news-card">
+        <img src="{{msg.profile.image_file.url}}" alt="Profile Picture" class="profile-pic">
+        <br>
+        <div class="news-content">
+            <strong>{{msg.profile.first_name}} {{msg.profile.last_name}}</strong> <i>at {{msg.timestamp}}</i>
+            <br><br>
+
+            {{msg.message}}
+            <br>
+
+            {% for img in msg.get_images %}
+                <img src='{{img.image_file.url}}' alt='{{img.image_file.url}}' class="news-image">
+            {% endfor %}
+        </div>
+    </div>
+
+{% endfor %}
+
+{% endblock %}
+
