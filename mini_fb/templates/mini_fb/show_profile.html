@@ -15,7 +15,7 @@ Last Modified: 2025-03-25
     <main>
         <!-- only display if user is signed in -->
         {% if profile.user == request.user %}
-        <a href="{% url 'news_feed' profile.pk %}">News Feed</a>
+        <a href="{% url 'news_feed' %}">News Feed</a>
         {% endif %}
 
         <h2>{{profile.first_name}} {{profile.last_name}}</h2>
@@ -36,8 +36,8 @@ Last Modified: 2025-03-25
              <h3>{{profile.first_name}}'s status messages</h3>
             <!-- only display if user is signed in -->
             {% if profile.user == request.user %}
-            <a href="{% url 'update_profile' profile.pk %}">Update Profile</a> | 
-            <a href="{% url 'create_status' profile.pk %}">Create Status Message</a>
+            <a href="{% url 'update_profile' %}">Update Profile</a> | 
+            <a href="{% url 'create_status' %}">Create Status Message</a>
             {% endif %}
              <!-- for loop to display all status messages for this profile -->
              {% for status in profile.get_status_messages %}
@@ -84,7 +84,7 @@ Last Modified: 2025-03-25
                 <!-- only display if user is signed in -->
                 {% if profile.user == request.user %}
                 <!-- button to link to friend suggestions page -->
-                <a href="{% url 'friend_suggestions' profile.pk %}">Friend Suggestions</a>
+                <a href="{% url 'friend_suggestions' %}">Friend Suggestions</a>
                 {% endif %}
 
              </div>

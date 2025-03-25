@@ -1,0 +1,16 @@
+<!--
+File: logged_out.html
+Description: Template for confirmation page for logging out.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-03-25
+Last Modified: 2025-03-25
+-->
+
+{% extends 'mini_fb/base.html' %}
+
+{% block content %}
+<h1>You are logged out. </h1>
+<a href="{% url 'login' %}">Login</a>
+{% endblock %}
+

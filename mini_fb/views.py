@@ -56,12 +56,18 @@ class CreateStatusMessageView(CustomLoginRequiredMixin, CreateView):
     form_class = CreateStatusMessageForm
     template_name = "mini_fb/create_status_form.html"
 
+    def get_object(self):
+        '''Returns Profile corresponding to the signed in user.'''
+        profiles = Profile.objects.filter(user=self.request.user)
+        # since admin is associated with multiple profiles, we will return the first no matter what
+        return profiles[0]
+
     def get_success_url(self):
         '''Provide a URL to redirect a user after successfully creating a new status message.'''
 
         # create and return a URL
         # get the primary key from the URL pattern
-        pk = self.kwargs['pk']
+        pk = self.get_object().pk
         return reverse("show_profile", kwargs={'pk': pk})
     
     def get_context_data(self):
@@ -70,9 +76,8 @@ class CreateStatusMessageView(CustomLoginRequiredMixin, CreateView):
         # call superclass method
         context = super().get_context_data()
 
-        # get the primary key from the URL pattern
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
+        # get the profile
+        profile = self.get_object()
 
         # add this profile into context data
         context["profile"] = profile
@@ -88,9 +93,8 @@ class CreateStatusMessageView(CustomLoginRequiredMixin, CreateView):
 
         # PRIMARY KEY HANDLING
 
-        # get the primary key from the URL pattern
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
+        # get the Profile
+        profile = self.get_object()
 
         # attach this profile to the status message
         form.instance.profile = profile
@@ -123,6 +127,12 @@ class UpdateProfileView(CustomLoginRequiredMixin, UpdateView):
     model = Profile
     form_class = UpdateProfileForm
     template_name = 'mini_fb/update_profile_form.html'
+
+    def get_object(self):
+        '''Returns specific Profile to work with in the template.'''
+        profiles = Profile.objects.filter(user=self.request.user)
+        # since admin is associated with multiple profiles, we will return the first no matter what
+        return profiles[0]
         
 class DeleteStatusMessageView(CustomLoginRequiredMixin, DeleteView):
     '''View class to delete a status message on a Profile.'''
@@ -155,10 +165,16 @@ class UpdateStatusMessageView(CustomLoginRequiredMixin, UpdateView):
 class CreateFriendView(CustomLoginRequiredMixin, View):
     '''View class to handle the creation of Friend relations.'''
 
+    def get_object(self):
+        '''Returns Profile corresponding to the signed in user.'''
+        profiles = Profile.objects.filter(user=self.request.user)
+        # since admin is associated with multiple profiles, we will return the first no matter what
+        return profiles[0]
+
     def dispatch(self, request, *args, **kwargs):
         
         # from the request get the 2 primary keys
-        pk1 = self.kwargs['pk']
+        pk1 = self.get_object().pk
         pk2 = self.kwargs['other_pk']
 
         profile1 = Profile.objects.get(pk=pk1)
@@ -174,8 +190,21 @@ class ShowFriendSuggestionsView(DetailView):
     model = Profile
     template_name = 'mini_fb/friend_suggestions.html'
 
+    def get_object(self):
+        '''Returns Profile corresponding to the signed in user.'''
+        profiles = Profile.objects.filter(user=self.request.user)
+        # since admin is associated with multiple profiles, we will return the first no matter what
+        return profiles[0]
+        
+
 class ShowNewsFeedView(DetailView):
     '''View class to display a news feed containing all StatusMessages for a profile and its friends.'''
 
     model = Profile
     template_name = 'mini_fb/news_feed.html'
+
+    def get_object(self):
+        '''Returns Profile corresponding to the signed in user.'''
+        profiles = Profile.objects.filter(user=self.request.user)
+        # since admin is associated with multiple profiles, we will return the first no matter what
+        return profiles[0]

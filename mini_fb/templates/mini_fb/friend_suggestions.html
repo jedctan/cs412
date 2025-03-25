@@ -16,7 +16,7 @@ Last Modified: 2025-03-21
 <table>
 {% for person in profile.get_friend_suggestions %}
     <td>    
-        <a href="{% url 'add_friend' profile.pk person.pk %}">Add friend</a>
+        <a href="{% url 'add_friend' person.pk %}">Add friend</a>
         <br>
         <a href="{% url 'show_profile' person.pk%}">
         {% if person.image_file %}
