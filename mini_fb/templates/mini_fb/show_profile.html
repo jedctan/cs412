@@ -4,7 +4,7 @@ Description: Displays single profile.
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-02-16
-Last Modified: 2025-03-21
+Last Modified: 2025-03-25
 -->
 
 {% extends 'mini_fb/base.html' %}
@@ -13,8 +13,11 @@ Last Modified: 2025-03-21
 
 
     <main>
+        <!-- only display if user is signed in -->
+        {% if profile.user == request.user %}
         <a href="{% url 'news_feed' profile.pk %}">News Feed</a>
-        
+        {% endif %}
+
         <h2>{{profile.first_name}} {{profile.last_name}}</h2>
         <table>
 
@@ -31,8 +34,11 @@ Last Modified: 2025-03-21
             <!-- Display all status messages for this profile -->
              <br>
              <h3>{{profile.first_name}}'s status messages</h3>
-             <a href="{% url 'update_profile' profile.pk %}">Update Profile</a> | 
-             <a href="{% url 'create_status' profile.pk %}">Create Status Message</a>
+            <!-- only display if user is signed in -->
+            {% if profile.user == request.user %}
+            <a href="{% url 'update_profile' profile.pk %}">Update Profile</a> | 
+            <a href="{% url 'create_status' profile.pk %}">Create Status Message</a>
+            {% endif %}
              <!-- for loop to display all status messages for this profile -->
              {% for status in profile.get_status_messages %}
              <div>
@@ -43,13 +49,18 @@ Last Modified: 2025-03-21
                     <!-- get the Image objects -->
                     {% for img in status.get_images %}
                     <img src='{{img.image_file.url}}' alt='{{img.image_file.url}}' height="200px">
-                    <!-- link to delete comments -->
                     {% endfor %}
                     <br>
+
+                    <!-- only display if user is signed in -->
+                    {% if profile.user == request.user %}
+                    <!-- link to delete comments -->
                     <a href="{% url 'delete_status' status.pk %}"> Delete</a>
 
                     <!-- link to update comments -->
                      | <a href="{% url 'update_status' status.pk %}"> Update</a>
+                    {% endif %}
+
                 </p>
              </div>
 
@@ -70,9 +81,11 @@ Last Modified: 2025-03-21
                         </td>
                     {% endfor %}
                 </table>
-
+                <!-- only display if user is signed in -->
+                {% if profile.user == request.user %}
                 <!-- button to link to friend suggestions page -->
                 <a href="{% url 'friend_suggestions' profile.pk %}">Friend Suggestions</a>
+                {% endif %}
 
              </div>
 

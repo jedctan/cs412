@@ -19,7 +19,7 @@ Last Modified: 2025-03-04
         <input type="submit" value="Yes">
     </form>
 
-    <form action="{% url 'delete_status' statusmessage.profile.pk %}" method="GET">
+    <form action="{% url 'show_profile' statusmessage.profile.pk %}" method="GET">
         {% csrf_token %}
         <input type="submit" value="No">
     </form>

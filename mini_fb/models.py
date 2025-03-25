@@ -8,6 +8,7 @@ Last Modified: 2025-03-21
 '''
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User # for authentication
 
 # Create your models here.
 
@@ -21,6 +22,7 @@ class Profile(models.Model):
     email = models.EmailField(blank=False)
     # profile_img_url = models.URLField(blank=False)
     image_file = models.ImageField(blank=True) # profile pic not required
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         '''Return a string representation of this Profile object.'''

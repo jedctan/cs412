@@ -12,6 +12,16 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Profile, Image, StatusImage, StatusMessage, Friend
 from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateStatusForm
 from django.urls import reverse # allows us to create a URL from a URL pattern name
+from django.contrib.auth.mixins import LoginRequiredMixin # for authentication    
+
+class CustomLoginRequiredMixin(LoginRequiredMixin):
+    '''Custom class to add changes to the LoginRequiredMixin class.'''
+
+    def get_login_url(self):
+        '''Return the URL for this app's login page.'''
+        # sends us to login screen if we try to create a profile when not logged in
+        return reverse('login')
+
 
 class ShowAllProfileViews(ListView):
     '''Display all the profiles in our database.'''
@@ -27,7 +37,7 @@ class ShowProfilePageView(DetailView):
     model = Profile
     template_name = "mini_fb/show_profile.html"
 
-class CreateProfileView(CreateView):
+class CreateProfileView(CustomLoginRequiredMixin, CreateView):
     '''
     A view to handle the creation of a new Profile. 
     (1) After a GET request, display the HTML form to the user
@@ -39,7 +49,8 @@ class CreateProfileView(CreateView):
     form_class = CreateProfileForm
     template_name = "mini_fb/create_profile_form.html"
 
-class CreateStatusMessageView(CreateView):
+
+class CreateStatusMessageView(CustomLoginRequiredMixin, CreateView):
     '''A view to handle the creation of new Status Messages for Profiles.'''
 
     form_class = CreateStatusMessageForm
@@ -106,14 +117,14 @@ class CreateStatusMessageView(CreateView):
         # delegate work to the superclass method form_valid
         return super().form_valid(form)
     
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(CustomLoginRequiredMixin, UpdateView):
     '''View class to handle update of a Profile based on its PK.'''
 
     model = Profile
     form_class = UpdateProfileForm
     template_name = 'mini_fb/update_profile_form.html'
         
-class DeleteStatusMessageView(DeleteView):
+class DeleteStatusMessageView(CustomLoginRequiredMixin, DeleteView):
     '''View class to delete a status message on a Profile.'''
 
     model = StatusMessage
@@ -133,7 +144,7 @@ class DeleteStatusMessageView(DeleteView):
 
         return reverse('show_profile', kwargs={'pk':profile.pk})
 
-class UpdateStatusMessageView(UpdateView):
+class UpdateStatusMessageView(CustomLoginRequiredMixin, UpdateView):
     '''View class to handle update of a status message of a Profile.'''
 
     model = StatusMessage
@@ -141,7 +152,7 @@ class UpdateStatusMessageView(UpdateView):
     template_name = 'mini_fb/update_status_form.html'
 
     
-class CreateFriendView(View):
+class CreateFriendView(CustomLoginRequiredMixin, View):
     '''View class to handle the creation of Friend relations.'''
 
     def dispatch(self, request, *args, **kwargs):

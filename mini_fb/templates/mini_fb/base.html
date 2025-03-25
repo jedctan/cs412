@@ -1,37 +1,54 @@
-<!--
-File: base.html
-Description: Provides a base for all other HTML files with style information, a header, nav bar, and a footer
-Author: Jed Tan
-Email: jctan@bu.edu
-Date Created: 2025-02-16
-Last Modified: 2025-03-02s
--->
+    <!--
+    File: base.html
+    Description: Provides a base for all other HTML files with style information, a header, nav bar, and a footer
+    Author: Jed Tan
+    Email: jctan@bu.edu
+    Date Created: 2025-02-16
+    Last Modified: 2025-03-25
+    -->
 
-{% load static %}
-<html>
-    <head>
-        <title>Mini Facebook</title>
+    {% load static %}
+    <html>
+        <head>
+            <title>Mini Facebook</title>
 
-        <link rel="stylesheet" href="{% static 'mini_fb/styles.css' %}">
-    </head>
-    <body>
-        <header>
+            <link rel="stylesheet" href="{% static 'mini_fb/styles.css' %}">
+        </head>
+        <body>
+            <header>
 
-            <nav>
-                <a href="{% url 'show_all_profiles' %}">Home</a> |
-                <a href="{% url 'create_profile' %}">Create Profile</a>
+                <nav>
+                    <a href="{% url 'show_all_profiles' %}">Home</a> |
 
-            </nav>
-            <h1>Mini Facebook</h1>
+                    {% if request.user.is_authenticated %}
+                    <a href="{% url 'create_profile' %}">Create Profile</a> |
 
-        </header>
+                    <!-- logout doesn't work with GET (so can't use anchor tag), must create form with POST -->
+                    <form action="{% url 'logout' %}" method="POST" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
+                    {% else %}
+                    <a href="{% url 'login' %}">Login</a>
+                    {% endif %}
+
+                </nav>
+                <h1>Mini Facebook</h1>
+                {% if request.user.is_authenticated %}
+                Logged in as: {{request.user}}
+                {% else %}
+                Not logged in.
+                {% endif %}
+
+
+            </header>
+                
+            {% block content %}
+            {% endblock %}
             
-        {% block content %}
-        {% endblock %}
-        
-        <footer>
-            Page created by jctan@bu.edu <br>
-        </footer>
+            <footer>
+                Page created by jctan@bu.edu <br>
+            </footer>
 
-    </body>
-</html>
+        </body>
+    </html>

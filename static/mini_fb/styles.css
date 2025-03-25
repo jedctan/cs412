@@ -38,6 +38,28 @@ nav li {
     margin-left: 20px;
 }
 
+button {
+    color: darkslategray;
+    text-decoration: none;
+    background-color: transparent;
+    display: inline-block;
+    border: 2px solid darkslategray;
+    margin-top: 10px;
+    padding: 2px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    font-size: medium;
+    font-family: 'Trebuchet MS';
+    cursor: pointer;
+
+}
+
+button:hover {
+    background-color: darkslategray;
+    color: white;
+    text-decoration: none;
+}
+
 a, a:visited {
     color: darkslategray;
     text-decoration: none;
@@ -122,4 +144,8 @@ footer {
     max-height: 200px;
     margin-top: 10px;
     border-radius: 8px;
+}
+
+.logout-form {
+    display: inline;
 }
