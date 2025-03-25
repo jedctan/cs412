@@ -4,7 +4,7 @@ Description: Template used to render the form shown to users for profile creatio
 Author: Jed Tan
 Email: jctan@bu.edu
 Date Created: 2025-03-02
-Last Modified: 2025-03-02
+Last Modified: 2025-03-25
 -->
 
 {% extends 'mini_fb/base.html' %}
@@ -16,10 +16,17 @@ Last Modified: 2025-03-02
 
         {% csrf_token %}
 
+        <!-- form to create new Profile -->
         <table>
             {{form.as_table}}
         </table>
 
+        <br>
+
+        <!-- form to create new User -->
+        <table>
+            {{user_form.as_table}}
+        </table>
 
         <input type="submit" name="submit" value="Submit"> <br>
         <a href="{% url 'show_all_profiles' %}">Cancel</a>

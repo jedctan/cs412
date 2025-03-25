@@ -13,6 +13,7 @@ from .models import Profile, Image, StatusImage, StatusMessage, Friend
 from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateStatusForm
 from django.urls import reverse # allows us to create a URL from a URL pattern name
 from django.contrib.auth.mixins import LoginRequiredMixin # for authentication    
+from django.contrib.auth.forms import UserCreationForm
 
 class CustomLoginRequiredMixin(LoginRequiredMixin):
     '''Custom class to add changes to the LoginRequiredMixin class.'''
@@ -48,6 +49,34 @@ class CreateProfileView(CustomLoginRequiredMixin, CreateView):
     # choose form class to use, which helps define different fields to display with their data types
     form_class = CreateProfileForm
     template_name = "mini_fb/create_profile_form.html"
+
+    def get_context_data(self, **kwargs):
+        '''Return a dictionary of context variables for use in the template.'''
+
+        # call superclass method
+        context = super().get_context_data()
+
+        # get the user creation form
+        user_form = UserCreationForm()
+
+        # add this form into context data
+        context["user_form"] = user_form
+
+        return context
+    
+    def form_valid(self, form):
+        '''This method handles the form submission and saves the new object to the Django db. '''
+
+        # reconstruct the UserCreationForm instance
+        user_form = UserCreationForm(self.request.POST)
+
+        # newly created User instance
+        user = user_form.save()
+        
+        # attach the user to the Profile instance object
+        form.instance.user = user
+
+        return super().form_valid(form)
 
 
 class CreateStatusMessageView(CustomLoginRequiredMixin, CreateView):
