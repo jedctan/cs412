@@ -1,3 +1,11 @@
+'''
+File: models.py
+Description: Define data models for Voter Analytics Application.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-03
+'''
+
 from django.db import models
 
 # Create your models here.
@@ -43,10 +51,10 @@ def load_data():
     # discard headers
     f.readline() # do nothing with it   
 
+    Voter.objects.all().delete()
+ 
     # read entire file
     for line in f:
-
-        Voter.objects.all().delete()
 
         try:
             # line = f.readline()
