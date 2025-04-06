@@ -1,10 +1,20 @@
+<!--
+File: voters.html
+Description: Template for the voters list page.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-03
+-->
+
 {% extends 'voter_analytics/base.html' %}
 
 {% block content %}
 <div class="container">
 
     <div class="row">
-        {% include "voter_analytics/search.html" %}
+        <form method="get" action="{% url 'voters_list' %}">
+            {% include "voter_analytics/search.html" %}
+        </form>
     </div>
 
     <!-- navigation links for different pages of voters -->

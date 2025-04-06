@@ -1,0 +1,28 @@
+
+<!--
+File: graphs.html
+Description: Template for the graphs page.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-03
+-->
+
+{% extends 'voter_analytics/base.html' %}
+{% block content %}
+
+<h1>Voter Graphs</h1>
+
+<a href="{% url 'voters_list' %}">Show Voter List</a>
+
+<form method="get" action="{% url 'graphs' %}">
+    {% include 'voter_analytics/search.html' %}
+</form>
+
+<hr>
+{{ birth_year_chart|safe }}
+
+{{ party_pie_chart|safe }}
+
+{{ elections_chart|safe }}
+
+{% endblock %}

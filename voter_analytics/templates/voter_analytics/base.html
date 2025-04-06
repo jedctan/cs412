@@ -1,4 +1,11 @@
 
+<!--
+File: base.html
+Description: Provides a base for all other HTML files with style information, a header, and nav bar
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-03
+-->
 
 {% load static %}
 <html>
@@ -11,7 +18,9 @@
             <h1>Voter Analytics</h1>
             <nav>
                 <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'home' %}">Show Voter List</a></li>
+                    <li><a href="{% url 'graphs' %}">Show Graphs</a>
+                    </li>
                 </ul>
 
             </nav>
