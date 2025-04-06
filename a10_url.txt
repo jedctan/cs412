@@ -1,1 +1,1 @@
-https://cs-webapps.bu.edu/jctan/mini_fb/
+https://cs-webapps.bu.edu/jctan/voter_analytics/
