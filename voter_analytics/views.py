@@ -10,9 +10,6 @@ from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from . models import Voter
-import plotly.graph_objs as go
-from plotly.offline import plot
-
 
 import plotly
 import plotly.graph_objs as go
