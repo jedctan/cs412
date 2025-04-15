@@ -9,7 +9,7 @@ urlpatterns = [
     path('add_item', CreateClothingItemView.as_view(), name="create_clothing_item"),
     path('create_outfit', CreateOutfitView.as_view(), name="create_outfit"),
     # authorization-related URLs
-    path('login/', auth_views.LoginView.as_view(template_name='project/login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(template_name='project/logged_out.html'), name='logout'),
+    path('login/', auth_views.LoginView.as_view(template_name='project/login.html'), name='project-login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='project/logged_out.html'), name='project-logout'),
 
 ]

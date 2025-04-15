@@ -10,8 +10,6 @@ Date Created: 2025-04-03
 {% extends 'voter_analytics/base.html' %}
 {% block content %}
 
-<h1>Voter Graphs</h1>
-
 <a href="{% url 'voters_list' %}">Show Voter List</a>
 
 <form method="get" action="{% url 'graphs' %}">
