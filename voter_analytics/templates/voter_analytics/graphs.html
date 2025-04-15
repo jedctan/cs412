@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 <!--
 File: graphs.html
@@ -14,15 +15,31 @@ Date Created: 2025-04-03
 
 <a href="{% url 'voters_list' %}">Show Voter List</a>
 
+=======
+{% extends 'voter_analytics/base.html' %}
+{% block content %}
+
+>>>>>>> bd319b8 (Wardrobe basic functionality)
 <form method="get" action="{% url 'graphs' %}">
     {% include 'voter_analytics/search.html' %}
 </form>
 
 <hr>
+<<<<<<< HEAD
 {{ birth_year_chart|safe }}
 
 {{ party_pie_chart|safe }}
 
 {{ elections_chart|safe }}
 
+=======
+<h2>Birth Year Distribution</h2>
+{{ birth_year_chart|safe }}
+
+<h2>Party Breakdown</h2>
+{{ party_pie_chart|safe }}
+
+<h2>Election Participation</h2>
+{{ elections_chart|safe }}
+>>>>>>> bd319b8 (Wardrobe basic functionality)
 {% endblock %}

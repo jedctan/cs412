@@ -1,0 +1,167 @@
+
+/*
+File: styles.css
+Description: Provides styling to all HTML files in mini_fb.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-02-16
+Last Modified: 2025-03-02
+*/
+
+body {
+    background-color: white;
+    color: black;
+    font-family: 'Trebuchet MS';
+}
+
+table {
+    font-size: 18px;
+    text-align: left;
+    border-collapse: collapse;
+
+}
+
+tr, td {
+    padding: 5pt;
+    border: 2px solid black;
+    white-space: nowrap;
+
+}
+
+nav {
+    justify-self: right;
+    background-color: none;
+}
+
+nav li {
+    display: inline-block;
+    margin-left: 20px;
+}
+
+button {
+    color: black;
+    text-decoration: none;
+    background-color: transparent;
+    display: inline-block;
+    border: 2px solid black;
+    margin-top: 10px;
+    padding: 2px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    font-size: medium;
+    font-family: 'Trebuchet MS';
+    cursor: pointer;
+
+}
+
+button:hover {
+    background-color: black;
+    color: white;
+    text-decoration: none;
+}
+
+a, a:visited {
+    color: black;
+    text-decoration: none;
+    background-color: transparent;
+    display: inline-block;
+    border: 2px solid black;
+    margin-top: 10px;
+    padding: 2px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+
+}
+
+a:hover {
+    background-color: black;
+    color: white;
+    text-decoration: none;
+}
+
+input[type="submit"] {
+    color: black;
+    text-decoration: none;
+    background-color: transparent;
+    display: inline-block;
+    border: 2px solid black;
+    padding: 4px;
+    margin-top: 5px;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+input[type="submit"]:hover {
+    background-color: black;
+    color: white;
+    text-decoration: none;
+}
+
+
+h1,h3,h4,h5{
+    font-weight: normal;
+    margin: 0;
+}
+
+
+body {
+    max-width: 960px;
+    margin: 20px auto;
+    padding: 20px auto;
+}
+
+footer {
+    margin-top: 30pt;
+    width: 100%;
+    bottom: 0px;
+}
+
+.news-card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 12px;
+    background-color: #fafafa;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    align-items: flex-start;
+}
+
+.profile-pic {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.news-content {
+    flex: 1;
+}
+
+.news-content img.news-image {
+    max-height: 200px;
+    margin-top: 10px;
+    border-radius: 8px;
+}
+
+.logout-form {
+    display: inline;
+}
+
+.wardrobe-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+.clothing-card {
+    width: 200px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+

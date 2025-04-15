@@ -1,0 +1,32 @@
+<!--
+File: create_clothing_item_form.html
+Description: Template used to render the form shown to users for adding a clothing item to their wardrobe.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-15
+-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+    <h1>Add clothing item</h1>
+    <!-- action is for where we send the inputted data after submission, so we send it back to CreateProfilView using the url function -->
+    <form action="{% url 'create_clothing_item' %}" method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <!-- form to create new clothing item -->
+        <table>
+            {{form.as_table}}
+        </table>
+
+        <br>
+
+        <input type="submit" name="submit" value="Submit"> <br>
+        <a href="{% url 'show_wardrobe' %}">Cancel</a>
+
+    </form>
+
+
+{% endblock %}
+

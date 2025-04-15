@@ -1,0 +1,30 @@
+<!--
+File: show_wardrobe.html
+Description: Displays all clothing items for this user on one page.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-14
+-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+
+
+    <main>
+        <h2>Wardrobe</h2>
+        <a href="{% url 'create_outfit' %}">Outfits</a>
+        <br><br>
+        <div class="wardrobe-grid">
+            {% for item in clothing_items %}
+                <div class="clothing-card">
+                    <strong>{{ item.brand }}</strong> {{ item.category }} <br>
+                    <img src="{{ item.image_file.url }}" alt="" style="height: 200px; width: 200px; object-fit: contain;"> <br>
+                </div>
+            {% endfor %}
+        </div>
+        
+
+    <main>
+
+{% endblock %}

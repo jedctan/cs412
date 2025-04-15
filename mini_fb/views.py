@@ -14,6 +14,8 @@ from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm
 from django.urls import reverse # allows us to create a URL from a URL pattern name
 from django.contrib.auth.mixins import LoginRequiredMixin # for authentication    
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+
 
 class CustomLoginRequiredMixin(LoginRequiredMixin):
     '''Custom class to add changes to the LoginRequiredMixin class.'''
@@ -70,13 +72,21 @@ class CreateProfileView(CustomLoginRequiredMixin, CreateView):
         # reconstruct the UserCreationForm instance
         user_form = UserCreationForm(self.request.POST)
 
-        # newly created User instance
-        user = user_form.save()
-        
-        # attach the user to the Profile instance object
-        form.instance.user = user
+        if user_form.is_valid():
+            # newly created User instance
+            user = user_form.save()
 
-        return super().form_valid(form)
+            # log them in
+            login(self.request, user)
+            
+            # attach the user to the Profile instance object
+            form.instance.user = user
+
+            return super().form_valid(form)
+
+        return super().form_invalid(form)
+        
+
 
 
 class CreateStatusMessageView(CustomLoginRequiredMixin, CreateView):
