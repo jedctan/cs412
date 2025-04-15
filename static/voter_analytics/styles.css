@@ -29,11 +29,7 @@ body {
 }
 
 header {
-<<<<<<< HEAD
     width: 50%;
-=======
-    width: 65%;
->>>>>>> bd319b8 (Wardrobe basic functionality)
     display: grid;
     grid-template-columns: 1fr 1fr;
     background:aliceblue;
