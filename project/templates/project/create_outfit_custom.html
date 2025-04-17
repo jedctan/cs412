@@ -1,0 +1,92 @@
+{% extends 'project/base.html' %}
+
+<!-- 
+Outfit:
+user
+name
+notes
+
+hat
+jacket
+shirt
+bottoms
+shoes
+-->
+
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+  
+    <label>Outfit Name:</label><br>
+    <input type="text" name="name"><br><br>
+  
+    <label>Notes:</label><br>
+    <textarea name="notes"></textarea><br><br>
+  
+
+    <label>Hat:</label><br>
+    {% for item in hats %}
+      <label style="display:inline-block; text-align:center; margin:10px;">
+        <input type="radio" name="hat" value="{{ item.id }}">
+        <br>
+        <img src="{{ item.image_file.url }}" alt="{{ item.brand }}" style="height: 100px;">
+        <br>
+        {{ item.brand }} ({{ item.category }})
+      </label>
+    {% endfor %}
+    <br><br>
+  
+    <label>Jacket:</label><br>
+    {% for item in jackets %}
+      <label style="display:inline-block; text-align:center; margin:10px;">
+        <input type="radio" name="jacket" value="{{ item.id }}">
+        <br>
+        <img src="{{ item.image_file.url }}" alt="{{ item.brand }}" style="height: 100px;">
+        <br>
+        {{ item.brand }} ({{ item.category }})
+      </label>
+    {% endfor %}
+    <br><br>
+  
+    <label>Shirt:</label><br>
+    {% for item in shirts %}
+      <label style="display:inline-block; text-align:center; margin:10px;">
+        <input type="radio" name="shirt" value="{{ item.id }}">
+        <br>
+        <img src="{{ item.image_file.url }}" alt="{{ item.brand }}" style="height: 100px;">
+        <br>
+        {{ item.brand }} ({{ item.category }})
+      </label>
+    {% endfor %}
+    <br><br>
+  
+    <label>Bottoms:</label><br>
+    {% for item in bottoms %}
+      <label style="display:inline-block; text-align:center; margin:10px;">
+        <input type="radio" name="bottoms" value="{{ item.id }}">
+        <br>
+        <img src="{{ item.image_file.url }}" alt="{{ item.brand }}" style="height: 100px;">
+        <br>
+        {{ item.brand }} ({{ item.category }})
+      </label>
+    {% endfor %}
+    <br><br>
+  
+    <label>Shoes:</label><br>
+    {% for item in shoes %}
+      <label style="display:inline-block; text-align:center; margin:10px;">
+        <input type="radio" name="shoes" value="{{ item.id }}">
+        <br>
+        <img src="{{ item.image_file.url }}" alt="{{ item.brand }}" style="height: 100px;">
+        <br>
+        {{ item.brand }} ({{ item.category }})
+      </label>
+    {% endfor %}
+    <br><br>
+    <input type="hidden" name="form_type" value="create_outfit">
+    <button type="submit">Create Outfit</button>
+
+  </form>
+
+{% endblock %}

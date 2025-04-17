@@ -42,8 +42,6 @@ class ClothingItem(models.Model):
         return f"{self.brand} {self.category}"
 
 
-    
-
 class Outfit(models.Model):
     '''Encapsulate the data for each outfit.'''
     user = models.ForeignKey(User, on_delete=models.CASCADE)

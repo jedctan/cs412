@@ -8,6 +8,8 @@ urlpatterns = [
     path('', ShowWardrobeView.as_view(), name="show_wardrobe"),
     path('add_item', CreateClothingItemView.as_view(), name="create_clothing_item"),
     path('create_outfit', CreateOutfitView.as_view(), name="create_outfit"),
+    path('outfit/', create_outfit, name='custom_create_outfit'),
+    path('outfits/', ShowOutfitsView.as_view(), name='outfit_list'),
     # authorization-related URLs
     path('login/', auth_views.LoginView.as_view(template_name='project/login.html'), name='project-login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='project/logged_out.html'), name='project-logout'),

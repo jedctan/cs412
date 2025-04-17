@@ -10,7 +10,7 @@ Date Created: 2025-04-14
 
 {% block content %}
 <h1>Login to DigiDrobe</h1>
-<form action="{% url 'login' %}" method="POST">
+<form action="{% url 'project-login' %}" method="POST">
     {% csrf_token %}
     {{form}}
     <input type="submit" value="Login">

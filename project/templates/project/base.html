@@ -16,12 +16,12 @@
                 <a href="{% url 'create_clothing_item' %}">Add Clothes</a> |
 
                 <!-- logout doesn't work with GET (so can't use anchor tag), must create form with POST -->
-                <form action="{% url 'logout' %}" method="POST" class="logout-form">
+                <form action="{% url 'project-logout' %}" method="POST" class="logout-form">
                     {% csrf_token %}
                     <button type="submit">Logout</button>
                 </form>
                 {% else %}
-                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'project-login' %}">Login</a>
                 {% endif %}
 
     
@@ -29,9 +29,9 @@
             </nav>
     
             {% if request.user.is_authenticated %}
-            Logged in as: {{request.user}}
+            Logged in as: {{request.user}} <br><br>
             {% else %}
-            Not logged in.
+            Not logged in. <br><br>
             {% endif %}
 
         </header>

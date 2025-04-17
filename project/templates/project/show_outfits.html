@@ -1,0 +1,145 @@
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+<h2>Your Outfits</h2>
+
+<style>
+  .outfit-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: center;
+  }
+
+  .outfit {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    padding: 16px;
+    background-color: #fdfdfd;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+
+  .clothing-stack {
+    position: relative;
+    width: 140px;
+    height: 300px;
+  }
+
+  .clothing-stack img {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+  }
+
+  .clothing-stack .head {
+    top: 30px;
+    height: 60px;
+    z-index: 4;
+  }
+
+  .clothing-stack .hat {
+    top: 5px;
+    height: 50px;
+    z-index: 4;
+  }
+
+  .clothing-stack .jacket,
+  .clothing-stack .shirt {
+    top: 60px;
+    height: 110px;
+    z-index: 3;
+  }
+
+  .clothing-stack .shirt {
+    z-index: 2;
+  }
+
+  .clothing-stack .bottoms {
+    top: 160px;
+    height: 110px;
+    z-index: 2;
+  }
+
+  .clothing-stack .shoes {
+    top: 265px;
+    height: 35px;
+    z-index: 3;
+  }
+
+  .toggle-btn {
+    margin-top: 8px;
+    background: #eee;
+    border: none;
+    padding: 4px 8px;
+    font-size: 0.9em;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+</style>
+
+<div class="outfit-grid">
+  {% for outfit in outfits %}
+    <div class="outfit">
+      <h3>{{ outfit.name }}</h3>
+      <div class="clothing-stack" id="outfit-{{ outfit.id }}">
+        <!-- Head image -->
+        <!-- <img src="{% static 'project/head.png' %}" class="head" alt="Head"> -->
+
+        {% if outfit.hat %}
+          <img src="{{ outfit.hat.image_file.url }}" class="hat" alt="Hat">
+        {% endif %}
+
+        {% if outfit.jacket %}
+          <img src="{{ outfit.jacket.image_file.url }}" class="jacket toggle-layer jacket-{{ outfit.id }}" alt="Jacket">
+        {% endif %}
+
+        {% if outfit.shirt %}
+          <img src="{{ outfit.shirt.image_file.url }}" class="shirt toggle-layer shirt-{{ outfit.id }}"
+               {% if outfit.jacket %}style="opacity: 0;"{% endif %}>
+        {% endif %}
+
+        {% if outfit.bottoms %}
+          <img src="{{ outfit.bottoms.image_file.url }}" class="bottoms" alt="Bottoms">
+        {% endif %}
+
+        {% if outfit.shoes %}
+          <img src="{{ outfit.shoes.image_file.url }}" class="shoes" alt="Shoes">
+        {% endif %}
+      </div>
+
+      {% if outfit.jacket and outfit.shirt %}
+        <button class="toggle-btn" onclick="toggleLayer('{{ outfit.id }}')">Toggle Jacket/Shirt</button>
+      {% endif %}
+
+      {% if outfit.notes %}
+        <p><em>{{ outfit.notes }}</em></p>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+  function toggleLayer(outfitId) {
+    const jacket = document.querySelector(`.jacket-${outfitId}`);
+    const shirt = document.querySelector(`.shirt-${outfitId}`);
+
+    if (!jacket || !shirt) return;
+
+    if (jacket.style.opacity === "0") {
+      jacket.style.opacity = "1";
+      shirt.style.opacity = "0";
+    } else {
+      jacket.style.opacity = "0";
+      shirt.style.opacity = "1";
+    }
+  }
+</script>
+{% endblock %}
