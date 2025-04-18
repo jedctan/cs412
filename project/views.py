@@ -96,24 +96,6 @@ class CreateClothingItemView(CustomLoginRequiredMixin, CreateView):
         '''Provide a URL to redirect a user after successfully adding a clothing item.'''
 
         return reverse("show_wardrobe")
-    
-class CreateOutfitView(CustomLoginRequiredMixin, CreateView):
-    '''
-    View to handle creation of outfits.
-    '''
-
-    form_class = CreateOutfit
-    template_name = "project/create_outfit_form.html"
-
-    def form_valid(self, form):
-        # set user
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        '''Provide a URL to redirect a user after successfully adding a clothing item.'''
-
-        return reverse("show_wardrobe")
 
 class ShowOutfitsView(CustomLoginRequiredMixin, ListView):
     '''Display all the clothing items.'''

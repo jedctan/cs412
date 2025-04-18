@@ -17,16 +17,4 @@ class CreateClothingItem(forms.ModelForm):
         fields = ['image_file', 'category', 'brand', 'color', 'season']
 
 
-class CreateOutfit(forms.ModelForm):
-    '''Form to create an outfit.'''
-
-    hat = forms.ModelChoiceField(queryset=ClothingItem.objects.filter(category='hat'))
-    jacket = forms.ModelChoiceField(queryset=ClothingItem.objects.filter(category='jacket'))
-    shirt = forms.ModelChoiceField(queryset=ClothingItem.objects.filter(category='shirt'))
-    bottoms = forms.ModelChoiceField(queryset=ClothingItem.objects.filter(category='bottom'))
-    shoes = forms.ModelChoiceField(queryset=ClothingItem.objects.filter(category='shoes'))
-
-    class Meta:
-        model = Outfit
-        fields = ['name', 'notes']
     

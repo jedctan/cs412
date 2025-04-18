@@ -7,7 +7,6 @@ from .views import *
 urlpatterns = [ 
     path('', ShowWardrobeView.as_view(), name="show_wardrobe"),
     path('add_item', CreateClothingItemView.as_view(), name="create_clothing_item"),
-    path('create_outfit', CreateOutfitView.as_view(), name="create_outfit"),
     path('outfit/', create_outfit, name='custom_create_outfit'),
     path('outfits/', ShowOutfitsView.as_view(), name='outfit_list'),
     # authorization-related URLs

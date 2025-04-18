@@ -50,12 +50,14 @@ class Outfit(models.Model):
     notes = models.TextField(blank=True)
 
     # components of the outfit
-    hat = models.ForeignKey('project.ClothingItem', on_delete=models.SET_NULL, null=True, related_name='outfits_hat')
-    jacket = models.ForeignKey('project.ClothingItem', on_delete=models.SET_NULL, null=True, related_name='outfits_jacket')
-    shirt = models.ForeignKey('project.ClothingItem', on_delete=models.SET_NULL, null=True, related_name='outfits_shirt')
-    bottoms = models.ForeignKey('project.ClothingItem', on_delete=models.SET_NULL, null=True, related_name='outfits_bottoms')
-    shoes = models.ForeignKey('project.ClothingItem', on_delete=models.SET_NULL, null=True, related_name='outfits_shoes')
+    hat = models.ForeignKey(ClothingItem, on_delete=models.SET_NULL, null=True, related_name='outfits_hat')
+    jacket = models.ForeignKey(ClothingItem, on_delete=models.SET_NULL, null=True, related_name='outfits_jacket')
+    shirt = models.ForeignKey(ClothingItem, on_delete=models.SET_NULL, null=True, related_name='outfits_shirt')
+    bottoms = models.ForeignKey(ClothingItem, on_delete=models.SET_NULL, null=True, related_name='outfits_bottoms')
+    shoes = models.ForeignKey(ClothingItem, on_delete=models.SET_NULL, null=True, related_name='outfits_shoes')
 
+    def __str__(self):
+        return f"{self.name}"
 
 class Event(models.Model):
     '''Encapsulate the data for events.'''
@@ -64,6 +66,9 @@ class Event(models.Model):
     date = models.DateTimeField(blank=False)
     outfit = models.ForeignKey('project.Outfit', on_delete=models.SET_NULL, null=True)
     location = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.title}"
 
 class Friendship(models.Model):
     '''Encapsulate the data for friendships.'''
