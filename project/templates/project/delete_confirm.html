@@ -1,0 +1,22 @@
+<!--
+File: delete_confirm.html
+Description: Template used to confirm deletion of a clothing item or outfit from the wardrobe.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-30
+-->
+
+{% extends 'project/base.html' %}
+{% block content %}
+
+<h2>Are you sure you want to delete this?</h2>
+
+<p><strong>{{ object }}</strong></p>
+
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Yes, delete</button>
+  <a href="{{ cancel_url }}">Cancel</a>
+</form>
+
+{% endblock %}

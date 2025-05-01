@@ -10,23 +10,80 @@ Date Created: 2025-04-14
 
 {% block content %}
 
+<main>
+  <div class="row">
+    <form method="get" action="{% url 'show_wardrobe' %}">
+      {% include "project/search_wardrobe.html" %}
+    </form>
+  </div>
 
-    <main>
-        <h2>Wardrobe</h2>
-        <a href="{% url 'custom_create_outfit' %}">Create Outfit</a>
-        <a href="{% url 'outfit_list' %}">View Outfits</a>
+  <h2>Wardrobe</h2>
 
-        <br><br>
-        <div class="wardrobe-grid">
-            {% for item in clothing_items %}
-                <div class="clothing-card">
-                    <strong>{{ item.brand }}</strong> {{ item.category }} <br>
-                    <img src="{{ item.image_file.url }}" alt="" style="height: 200px; width: 200px; object-fit: contain;"> <br>
-                </div>
-            {% endfor %}
-        </div>
-        
+  <div class="wardrobe-links">
+    <a href="{% url 'custom_create_outfit' %}">Create Outfit</a>
+    <a href="{% url 'outfit_list' %}">View Outfits</a>
+  </div>
 
-    <main>
+  <!-- display grid of clothing cards that show the user's items -->
+  <div class="wardrobe-grid">
+    {% for item in clothing_items %}
+      <div class="clothing-card">
+        <a href="{% url 'item_detail' item.pk %}" style="all: unset; cursor: pointer;">
+          <strong>{{ item.brand }}</strong> {{ item.category }} <br>
+          <img src="{{ item.image_file.url }}" alt="{{ item.brand }}" class="clothing-thumbnail"> <br>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+</main>
 
+
+<style>
+    .wardrobe-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: flex-start;
+    }
+  
+    .clothing-card {
+      width: 200px;
+      text-align: center;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 10px;
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease;
+    }
+  
+    .clothing-card:hover {
+      transform: scale(1.03);
+      box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.3);
+    }
+  
+    .clothing-thumbnail {
+      height: 200px;
+      width: 200px;
+      object-fit: contain;
+    }
+  
+    .wardrobe-links {
+      margin-bottom: 20px;
+    }
+  
+    .wardrobe-links a {
+      margin-right: 15px;
+      text-decoration: none;
+      border: 1px solid black;
+      padding: 4px 10px;
+      border-radius: 6px;
+      transition: background-color 0.2s ease;
+    }
+  
+    .wardrobe-links a:hover {
+      background-color: black;
+      color: white;
+    }
+  </style>
+  
 {% endblock %}

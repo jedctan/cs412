@@ -1,0 +1,121 @@
+<!--
+File: update_outfit_custom.html
+Description: Template for editing an existing outfit in the user's wardrobe.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-30
+-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+
+<h2>Edit Outfit</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <label>Outfit Name:</label><br>
+    <input type="text" name="name" value="{{ outfit.name }}"><br><br>
+
+    <label>Notes:</label><br>
+    <textarea name="notes">{{ outfit.notes }}</textarea><br><br>
+
+    <label>Season:</label><br>
+    <select name="season">
+      <option value="">-- Select a Season --</option>
+      <option value="fall_winter" {% if outfit.season == 'fall_winter' %}selected{% endif %}>Fall/Winter</option>
+      <option value="spring_summer" {% if outfit.season == 'spring_summer' %}selected{% endif %}>Spring/Summer</option>
+      <option value="all_year" {% if outfit.season == 'all_year' %}selected{% endif %}>All Year</option>
+    </select>
+    <br><br>
+
+    <label>Occasion:</label><br>
+    <select name="occasion">
+      <option value="">-- Select an Occasion --</option>
+      <option value="casual" {% if outfit.occasion == 'casual' %}selected{% endif %}>Casual</option>
+      <option value="formal" {% if outfit.occasion == 'formal' %}selected{% endif %}>Formal</option>
+      <option value="party" {% if outfit.occasion == 'party' %}selected{% endif %}>Party</option>
+      <option value="work" {% if outfit.occasion == 'work' %}selected{% endif %}>Work</option>
+      <option value="vacation" {% if outfit.occasion == 'vacation' %}selected{% endif %}>Vacation</option>
+    </select>
+    <br><br>
+
+    <!-- for each iteam display all images in a radio select -->
+    <label>Hat:</label><br>
+    {% for item in hats %}
+      <label class="item-select-label">
+        <input type="radio" name="hat" value="{{ item.id }}"
+               {% if outfit.hat and item.id == outfit.hat.id %}checked{% endif %}>
+        <br>
+        <img src="{{ item.image_file.url }}" alt="{{ item.brand }}"><br>
+        {{ item.brand }} ({{ item.category }})
+      </label>
+    {% endfor %}
+    <br><br>
+
+    <label>Jacket:</label><br>
+    {% for item in jackets %}
+      <label class="item-select-label">
+        <input type="radio" name="jacket" value="{{ item.id }}"
+               {% if outfit.jacket and item.id == outfit.jacket.id %}checked{% endif %}>
+        <br>
+        <img src="{{ item.image_file.url }}" alt="{{ item.brand }}"><br>
+        {{ item.brand }} ({{ item.category }})
+      </label>
+    {% endfor %}
+    <br><br>
+
+    <label>Shirt:</label><br>
+    {% for item in shirts %}
+      <label class="item-select-label">
+        <input type="radio" name="shirt" value="{{ item.id }}"
+               {% if outfit.shirt and item.id == outfit.shirt.id %}checked{% endif %}>
+        <br>
+        <img src="{{ item.image_file.url }}" alt="{{ item.brand }}"><br>
+        {{ item.brand }} ({{ item.category }})
+      </label>
+    {% endfor %}
+    <br><br>
+
+    <label>Bottoms:</label><br>
+    {% for item in bottoms %}
+      <label class="item-select-label">
+        <input type="radio" name="bottoms" value="{{ item.id }}"
+               {% if outfit.bottoms and item.id == outfit.bottoms.id %}checked{% endif %}>
+        <br>
+        <img src="{{ item.image_file.url }}" alt="{{ item.brand }}"><br>
+        {{ item.brand }} ({{ item.category }})
+      </label>
+    {% endfor %}
+    <br><br>
+
+    <label>Shoes:</label><br>
+    {% for item in shoes %}
+      <label class="item-select-label">
+        <input type="radio" name="shoes" value="{{ item.id }}"
+               {% if outfit.shoes and item.id == outfit.shoes.id %}checked{% endif %}>
+        <br>
+        <img src="{{ item.image_file.url }}" alt="{{ item.brand }}"><br>
+        {{ item.brand }} ({{ item.category }})
+      </label>
+    {% endfor %}
+    <br><br>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+<p><a href="{% url 'outfit_detail' outfit.pk %}">Cancel</a></p>
+
+<style>
+  .item-select-label {
+    display: inline-block;
+    text-align: center;
+    margin: 10px;
+  }
+
+  .item-select-label img {
+    height: 100px;
+  }
+</style>
+
+{% endblock %}

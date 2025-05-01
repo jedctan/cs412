@@ -1,0 +1,28 @@
+<!--
+File: update_clothing_item_form.html
+Description: Template for editing a clothing item in the user's wardrobe.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-30
+-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+  <h2>Edit Clothing Item</h2>
+
+  {% if object.image_file %}
+    <img src="{{ object.image_file.url }}" width="150" alt="Current Clothing Item">
+  {% endif %}
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+    </table>
+    <button type="submit">Save Changes</button>
+  </form>
+
+  <p><a href="{{ cancel_url }}">Cancel</a></p>
+
+{% endblock %}

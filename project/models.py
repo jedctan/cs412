@@ -18,6 +18,7 @@ class ClothingItem(models.Model):
     image_file = models.ImageField(blank=False)
 
 
+    # tuples: (in model, shown in forms)
     CATEGORY_CHOICES = [
         ('hat', 'Hat'),
         ('jacket', 'Jacket'),
@@ -29,6 +30,7 @@ class ClothingItem(models.Model):
     SEASON_CHOICES = [
         ('fall_winter', 'Fall/Winter'),
         ('spring_summer', 'Spring/Summer'),
+        ('all_year', 'All Year'),
     ]
 
     # hat, jacket, shirt, bottom, or shoes
@@ -39,6 +41,7 @@ class ClothingItem(models.Model):
     season = models.CharField(max_length=20, choices=SEASON_CHOICES, blank=True)
 
     def __str__(self):
+        '''Return a string representation of the clothing item.'''
         return f"{self.brand} {self.category}"
 
 
@@ -49,6 +52,23 @@ class Outfit(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     notes = models.TextField(blank=True)
 
+    SEASON_CHOICES = [
+        ('fall_winter', 'Fall/Winter'),
+        ('spring_summer', 'Spring/Summer'),
+        ('all_year', 'All Year'),
+    ]
+
+    OCCASION_CHOICES = [
+        ('casual', 'Casual'),
+        ('formal', 'Formal'),
+        ('party', 'Party'),
+        ('work', 'Work'),
+        ('vacation', 'Vacation'),
+    ]
+
+    season = models.CharField(max_length=20, choices=SEASON_CHOICES, blank=True, null=True)
+    occasion = models.CharField(max_length=20, choices=OCCASION_CHOICES, blank=True, null=True)
+
     # components of the outfit
     hat = models.ForeignKey(ClothingItem, on_delete=models.SET_NULL, null=True, related_name='outfits_hat')
     jacket = models.ForeignKey(ClothingItem, on_delete=models.SET_NULL, null=True, related_name='outfits_jacket')
@@ -57,6 +77,7 @@ class Outfit(models.Model):
     shoes = models.ForeignKey(ClothingItem, on_delete=models.SET_NULL, null=True, related_name='outfits_shoes')
 
     def __str__(self):
+        '''Return a string representation of the outfit.'''
         return f"{self.name}"
 
 class Event(models.Model):
@@ -68,6 +89,7 @@ class Event(models.Model):
     location = models.TextField(blank=True)
 
     def __str__(self):
+        '''Return a string representation of the event.'''
         return f"{self.title}"
 
 class Friendship(models.Model):

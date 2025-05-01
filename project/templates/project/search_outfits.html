@@ -1,0 +1,51 @@
+<!--
+File: search.html
+Description: Template to search through clothing items in the wardrobe.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-29
+-->
+
+<table>
+    <!-- Name -->
+    <!-- Season -->
+    <!-- Occasion -->
+    <tr>
+        <th>Name:</th>
+        <td>
+            <!-- django needs the if statement, because initally there is no selection so request.GET.name does not exist -->
+            <input type="text" name="name" placeholder="Search by name..." value="{% if request.GET.name %}{{ request.GET.name }}{% endif %}">
+        </td>
+    </tr>
+    
+    <tr>
+        <th>Season:</th>
+        <td>
+            <select name="season">
+                <option value="">All Year</option>
+                {% for val, s in seasons %}
+                    {% if val != "all_year" %}
+                        <option value="{{ val }}" {% if request.GET.season == val %}selected{% endif %}>{{ s }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <th>Occasion:</th>
+        <td>
+            <select name="occasion">
+                <option value="">Any</option>
+                {% for val, s in occasions %}
+                    <option value="{{ val }}" {% if request.GET.occasion == val %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td><input type="submit" value="Search"></td>
+    </tr>
+
+</table>

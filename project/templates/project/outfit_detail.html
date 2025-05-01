@@ -1,0 +1,188 @@
+<!--
+File: outfit_detail.html
+Description: Displays details for a single outfit.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-24
+-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="outfit-wrapper">
+  <h2 class="outfit-title">{{ outfit.name }}</h2>
+
+  <!-- show entire outfit with stacked images -->
+  <div class="outfit-content">
+    <div class="clothing-stack" id="outfit-{{ outfit.id }}">
+      {% if outfit.hat %}
+        <img src="{{ outfit.hat.image_file.url }}" class="hat" alt="Hat">
+      {% endif %}
+
+      {% if outfit.jacket %}
+        <img src="{{ outfit.jacket.image_file.url }}" class="jacket toggle-layer jacket-{{ outfit.id }}" alt="Jacket">
+      {% endif %}
+
+      {% if outfit.shirt %}
+        <img src="{{ outfit.shirt.image_file.url }}" class="shirt toggle-layer shirt-{{ outfit.id }}"
+             {% if outfit.jacket %}style="opacity: 0;"{% endif %}>
+      {% endif %}
+
+      {% if outfit.bottoms %}
+        <img src="{{ outfit.bottoms.image_file.url }}" class="bottoms" alt="Bottoms">
+      {% endif %}
+
+      {% if outfit.shoes %}
+        <img src="{{ outfit.shoes.image_file.url }}" class="shoes" alt="Shoes">
+      {% endif %}
+    </div>
+
+    <!-- labels for each piece -->
+    <div class="outfit-details">
+      {% if outfit.hat %}
+        <p><strong>Hat:</strong> {{ outfit.hat.brand }} ({{ outfit.hat.category }})</p>
+      {% endif %}
+      {% if outfit.jacket %}
+        <p><strong>Jacket:</strong> {{ outfit.jacket.brand }} ({{ outfit.jacket.category }})</p>
+      {% endif %}
+      {% if outfit.shirt %}
+        <p><strong>Shirt:</strong> {{ outfit.shirt.brand }} ({{ outfit.shirt.category }})</p>
+      {% endif %}
+      {% if outfit.bottoms %}
+        <p><strong>Bottoms:</strong> {{ outfit.bottoms.brand }} ({{ outfit.bottoms.category }})</p>
+      {% endif %}
+      {% if outfit.shoes %}
+        <p><strong>Shoes:</strong> {{ outfit.shoes.brand }} ({{ outfit.shoes.category }})</p>
+      {% endif %}
+
+      {% if outfit.jacket and outfit.shirt %}
+        <button class="toggle-btn" onclick="toggleLayer('{{ outfit.id }}')">Toggle Jacket/Shirt</button>
+      {% endif %}
+
+      {% if outfit.notes %}
+        <p class="outfit-notes"><strong>Notes:</strong> {{ outfit.notes }}</p>
+      {% endif %}
+
+    </div>
+
+    <div style="margin-top: 30px;">
+      <a href="{% url 'custom_update_outfit' outfit.pk %}">Edit</a>
+      <a href="{% url 'delete_outfit' outfit.pk %}">Delete</a>
+      <a href="{% url 'outfit_list' %}" >Back</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Function to toggle visibility of jacket and shirt layers
+  function toggleLayer(outfitId) {
+    const jacket = document.querySelector(`.jacket-${outfitId}`);
+    const shirt = document.querySelector(`.shirt-${outfitId}`);
+
+    if (!jacket || !shirt) return;
+
+    // switch opacity between jacket and shirt
+    if (jacket.style.opacity === "0") {
+      jacket.style.opacity = "1";
+      shirt.style.opacity = "0";
+    } else {
+      jacket.style.opacity = "0";
+      shirt.style.opacity = "1";
+    }
+  }
+</script>
+
+<style>
+  .outfit-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 12px;
+  }
+
+  .outfit-title {
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 10px;
+  }
+
+  .outfit-content {
+    display: flex;
+    gap: 48px;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 0px;
+  }
+
+  .clothing-stack {
+    position: relative;
+    width: 200px;
+    height: 400px;
+  }
+
+  .clothing-stack img {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    object-fit: contain;
+    transition: opacity 0.3s ease;
+  }
+
+  .clothing-stack .hat {
+    top: 10px;
+    height: 60px;
+    z-index: 4;
+  }
+
+  .clothing-stack .jacket,
+  .clothing-stack .shirt {
+    top: 70px;
+    height: 140px;
+    z-index: 3;
+  }
+
+  .clothing-stack .shirt {
+    z-index: 2;
+  }
+
+  .clothing-stack .bottoms {
+    top: 200px;
+    height: 130px;
+    z-index: 2;
+  }
+
+  .clothing-stack .shoes {
+    top: 330px;
+    height: 50px;
+    z-index: 3;
+  }
+
+  .outfit-details {
+    max-width: 300px;
+    font-size: 1rem;
+    margin-top: 0px; 
+  }
+
+  .outfit-details p {
+    margin-bottom: 10px;
+  }
+
+  .toggle-btn {
+    margin-top: 16px;
+    background: #eee;
+    border: none;
+    padding: 6px 12px;
+    font-size: 0.9em;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .outfit-notes {
+    margin-top: 24px;
+    color: #555;
+    font-style: italic;
+  }
+</style>
+
+{% endblock %}

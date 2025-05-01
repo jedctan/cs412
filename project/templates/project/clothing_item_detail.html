@@ -1,0 +1,73 @@
+<!--
+File: clothing_item_detail.html
+Description: Displays details for a single outfit.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-24
+-->
+
+{% extends 'project/base.html' %}
+{% load static %}
+
+{% block content %}
+  <link rel="stylesheet" href="{% static 'project/clothing_item.css' %}">
+
+  <div class="clothing-item-wrapper">
+    <h2>{{ item.brand }} - {{ item.category }}</h2>
+
+    {% if item.image_file %}
+      <img src="{{ item.image_file.url }}" alt="{{ item.brand }}" class="clothing-image">
+    {% endif %}
+
+    <div class="clothing-details">
+      {% if item.color %}
+        <p><strong>Color:</strong> {{ item.color }}</p>
+      {% endif %}
+
+      {% if item.season %}
+        <!-- get the label not actual val -->
+        <p><strong>Season:</strong> {{ item.get_season_display }} </p>
+      {% endif %}
+
+    </div>
+
+    <div class="clothing-links">
+      <a href="{% url 'show_wardrobe' %}">Back</a>
+      <a href="{% url 'update_clothing_item' item.pk %}">Edit</a>
+      <a href="{% url 'delete_clothing_item' item.pk %}">Delete</a>
+    </div>
+  </div>
+
+  <style>
+
+  .clothing-item-wrapper {
+    max-width: 600px;
+    margin: 40px auto;
+    text-align: center;
+  }
+
+  .clothing-image {
+    max-width: 100%;
+    height: 300px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+
+  .clothing-details {
+    margin-top: 20px;
+    font-size: 1.1em;
+  }
+
+  .clothing-links {
+    margin-top: 30px;
+  }
+
+  .clothing-links a {
+    margin-right: 10px;
+  }
+
+
+  </style>
+
+{% endblock %}

@@ -9,12 +9,16 @@ Date Created: 2025-04-14
 from django import forms
 from .models import ClothingItem, Outfit
 
-class CreateClothingItem(forms.ModelForm):
+class CreateClothingItemForm(forms.ModelForm):
     '''Form to create a clothing item.'''
 
     class Meta:
         model = ClothingItem
         fields = ['image_file', 'category', 'brand', 'color', 'season']
 
+class UpdateClothingItemForm(forms.ModelForm):
+    '''Form to update a clothing item.'''
 
-    
+    class Meta:
+        model = ClothingItem
+        fields = ['image_file', 'category', 'brand', 'color', 'season']

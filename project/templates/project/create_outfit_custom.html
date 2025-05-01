@@ -1,17 +1,12 @@
-{% extends 'project/base.html' %}
-
-<!-- 
-Outfit:
-user
-name
-notes
-
-hat
-jacket
-shirt
-bottoms
-shoes
+<!--
+File: create_outfit_custom.html
+Description: Template used to render the form shown to users for creating an outfit.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-15
 -->
+
+{% extends 'project/base.html' %}
 
 {% block content %}
 
@@ -24,12 +19,12 @@ shoes
     <label>Notes:</label><br>
     <textarea name="notes"></textarea><br><br>
   
-
     <label>Hat:</label><br>
     {% for item in hats %}
       <label style="display:inline-block; text-align:center; margin:10px;">
         <input type="radio" name="hat" value="{{ item.id }}">
         <br>
+        <!-- display all images for users to choose from -->
         <img src="{{ item.image_file.url }}" alt="{{ item.brand }}" style="height: 100px;">
         <br>
         {{ item.brand }} ({{ item.category }})

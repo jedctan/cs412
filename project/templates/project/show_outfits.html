@@ -1,8 +1,80 @@
+<!--
+File: show_outfits.html
+Description: Displays all outfins for this user on one page.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-16
+-->
+
 {% extends 'project/base.html' %}
 {% load static %}
 
 {% block content %}
+
+<div class="row">
+  <form method="get" action="{% url 'outfit_list' %}">
+      {% include "project/search_outfits.html" %}
+  </form>
+</div>
+
 <h2>Your Outfits</h2>
+
+<div class="outfit-grid">
+  {% for outfit in outfits %}
+  <div class="outfit">
+    <!-- in line styling to make the link invisible -->
+    <a href="{% url 'outfit_detail' outfit.pk %}" style="all: unset; cursor: pointer; display: block;">
+      <h3>{{ outfit.name }}</h3>
+      <div class="clothing-stack" id="outfit-{{ outfit.id }}">
+        {% if outfit.hat %}
+          <img src="{{ outfit.hat.image_file.url }}" class="hat" alt="Hat">
+        {% endif %}
+        {% if outfit.jacket %}
+          <img src="{{ outfit.jacket.image_file.url }}" class="jacket toggle-layer jacket-{{ outfit.id }}" alt="Jacket">
+        {% endif %}
+        {% if outfit.shirt %}
+          <img src="{{ outfit.shirt.image_file.url }}" class="shirt toggle-layer shirt-{{ outfit.id }}"
+               {% if outfit.jacket %}style="opacity: 0;"{% endif %}>
+        {% endif %}
+        {% if outfit.bottoms %}
+          <img src="{{ outfit.bottoms.image_file.url }}" class="bottoms" alt="Bottoms">
+        {% endif %}
+        {% if outfit.shoes %}
+          <img src="{{ outfit.shoes.image_file.url }}" class="shoes" alt="Shoes">
+        {% endif %}
+      </div>
+    </a>
+  
+    {% if outfit.jacket and outfit.shirt %}
+      <button class="toggle-btn" onclick="toggleLayer('{{ outfit.id }}')">Toggle Jacket/Shirt</button>
+    {% endif %}
+  
+    {% if outfit.notes %}
+      <p class="outfit-notes"><em>{{ outfit.notes }}</em></p>
+    {% endif %}
+  </div>
+  
+  {% endfor %}
+</div>
+
+<script>
+  // Function to toggle visibility of jacket and shirt layers
+  function toggleLayer(outfitId) {
+    const jacket = document.querySelector(`.jacket-${outfitId}`);
+    const shirt = document.querySelector(`.shirt-${outfitId}`);
+
+    if (!jacket || !shirt) return;
+
+    // switch opacity between jacket and shirt
+    if (jacket.style.opacity === "0") {
+      jacket.style.opacity = "1";
+      shirt.style.opacity = "0";
+    } else {
+      jacket.style.opacity = "0";
+      shirt.style.opacity = "1";
+    }
+  }
+</script>
 
 <style>
   .outfit-grid {
@@ -17,18 +89,26 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 200px;
+    width: 220px;
+    height: 520px;
     padding: 16px;
     background-color: #fdfdfd;
     border: 1px solid #ccc;
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .outfit:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
   }
 
   .clothing-stack {
     position: relative;
-    width: 140px;
-    height: 300px;
+    width: 180px;
+    height: 380px;
+    margin-bottom: 14px;
   }
 
   .clothing-stack img {
@@ -39,14 +119,8 @@
     transition: opacity 0.3s ease;
   }
 
-  .clothing-stack .head {
-    top: 30px;
-    height: 60px;
-    z-index: 4;
-  }
-
   .clothing-stack .hat {
-    top: 5px;
+    top: 10px;
     height: 50px;
     z-index: 4;
   }
@@ -54,23 +128,19 @@
   .clothing-stack .jacket,
   .clothing-stack .shirt {
     top: 60px;
-    height: 110px;
+    height: 150px;
     z-index: 3;
   }
 
-  .clothing-stack .shirt {
-    z-index: 2;
-  }
-
   .clothing-stack .bottoms {
-    top: 160px;
-    height: 110px;
+    top: 200px;
+    height: 150px;
     z-index: 2;
   }
 
   .clothing-stack .shoes {
-    top: 265px;
-    height: 35px;
+    top: 340px;
+    height: 50px;
     z-index: 3;
   }
 
@@ -78,68 +148,23 @@
     margin-top: 8px;
     background: #eee;
     border: none;
-    padding: 4px 8px;
+    padding: 4px 10px;
     font-size: 0.9em;
     border-radius: 4px;
     cursor: pointer;
   }
+
+  .outfit-notes {
+    font-size: 0.85em;
+    color: #444;
+    margin-top: 10px;
+    height: 40px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 </style>
 
-<div class="outfit-grid">
-  {% for outfit in outfits %}
-    <div class="outfit">
-      <h3>{{ outfit.name }}</h3>
-      <div class="clothing-stack" id="outfit-{{ outfit.id }}">
-        <!-- Head image -->
-        <!-- <img src="{% static 'project/head.png' %}" class="head" alt="Head"> -->
-
-        {% if outfit.hat %}
-          <img src="{{ outfit.hat.image_file.url }}" class="hat" alt="Hat">
-        {% endif %}
-
-        {% if outfit.jacket %}
-          <img src="{{ outfit.jacket.image_file.url }}" class="jacket toggle-layer jacket-{{ outfit.id }}" alt="Jacket">
-        {% endif %}
-
-        {% if outfit.shirt %}
-          <img src="{{ outfit.shirt.image_file.url }}" class="shirt toggle-layer shirt-{{ outfit.id }}"
-               {% if outfit.jacket %}style="opacity: 0;"{% endif %}>
-        {% endif %}
-
-        {% if outfit.bottoms %}
-          <img src="{{ outfit.bottoms.image_file.url }}" class="bottoms" alt="Bottoms">
-        {% endif %}
-
-        {% if outfit.shoes %}
-          <img src="{{ outfit.shoes.image_file.url }}" class="shoes" alt="Shoes">
-        {% endif %}
-      </div>
-
-      {% if outfit.jacket and outfit.shirt %}
-        <button class="toggle-btn" onclick="toggleLayer('{{ outfit.id }}')">Toggle Jacket/Shirt</button>
-      {% endif %}
-
-      {% if outfit.notes %}
-        <p><em>{{ outfit.notes }}</em></p>
-      {% endif %}
-    </div>
-  {% endfor %}
-</div>
-
-<script>
-  function toggleLayer(outfitId) {
-    const jacket = document.querySelector(`.jacket-${outfitId}`);
-    const shirt = document.querySelector(`.shirt-${outfitId}`);
-
-    if (!jacket || !shirt) return;
-
-    if (jacket.style.opacity === "0") {
-      jacket.style.opacity = "1";
-      shirt.style.opacity = "0";
-    } else {
-      jacket.style.opacity = "0";
-      shirt.style.opacity = "1";
-    }
-  }
-</script>
 {% endblock %}
+
+
