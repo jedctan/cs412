@@ -1,0 +1,24 @@
+<!--
+File: create_event.html
+Description: Template used for the form for creating a new event.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-30
+-->
+
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h2>Create Event</h2>
+
+<form method="post">
+  {% csrf_token %}
+  <table>
+    {{ form.as_table }}
+  </table>
+  <button type="submit">Create Event</button>
+</form>
+
+<p><a href="{% url 'event_list' %}">Back to Events</a></p>
+{% endblock %}

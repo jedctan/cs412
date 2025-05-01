@@ -1,0 +1,54 @@
+<!--
+File: create_event.html
+Description: Template used to view the details of a specific event.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-30
+-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+
+<div class="event-detail">
+  <h2>{{ event.title }}</h2>
+  <div class="event-meta">
+    {{ event.date|date:"M d, Y H:i" }}{% if event.location %} @ {{ event.location }}{% endif %}
+  </div>
+
+  {% if event.description %}
+    <div class="event-description">
+      {{ event.description|linebreaks }}
+    </div>
+  {% endif %}
+
+  <p><a href="{% url 'event_list' %}">Back to Events</a></p>
+</div>
+
+<style>
+    .event-detail {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: white;
+      box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  
+    .event-detail h2 {
+      margin-top: 0;
+    }
+  
+    .event-meta {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 10px;
+    }
+  
+    .event-description {
+      margin-top: 10px;
+      font-size: 1em;
+    }
+  </style>
+{% endblock %}

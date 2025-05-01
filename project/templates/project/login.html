@@ -9,20 +9,77 @@ Date Created: 2025-04-14
 {% extends 'project/base.html' %}
 
 {% block content %}
-<h1>Login to DigiDrobe</h1>
-<form action="{% url 'project-login' %}" method="POST">
-    {% csrf_token %}
-    {{form}}
-    <input type="submit" value="Login">
 
-    <!-- if a user tries to create/update/delete while not logged in they will be redirected to login -->
-    <!-- after logging in, they should be redirected back to that screen -->
+<div class="auth-box">
+  <h1>Login to DigiDrobe</h1>
+  <form action="{% url 'project_login' %}" method="POST">
+    {% csrf_token %}
+    {{ form }}
+
     {% if request.GET.next %}
-    <input type="hidden" name="next" value="{{request.GET.next}}">
+      <input type="hidden" name="next" value="{{ request.GET.next }}">
     {% else %}
-    <!-- otherwise, after successful login, redirect to profile page -->
-     <input type="hidden" name="next" value="{% url 'show_wardrobe' %}">
+      <input type="hidden" name="next" value="{% url 'show_wardrobe' %}">
     {% endif %}
-</form>
+
+    <input type="submit" value="Login">
+  </form>
+
+  <div class="register-section">
+    <p>Don't have an account?</p>
+    <a href="{% url 'project_create_profile' %}" class="register-btn">Register Now</a>
+  </div>
+</div>
+
+
+<style>
+  .auth-box {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 24px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .auth-box h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .auth-box form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .auth-box input[type="submit"],
+  .auth-box .register-btn {
+    padding: 8px 12px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 1em;
+    text-decoration: none;
+  }
+
+  .auth-box .register-btn {
+    background: #555;
+  }
+
+  .auth-box .register-btn:hover,
+  .auth-box input[type="submit"]:hover {
+    background-color: #222;
+  }
+
+  .register-section {
+    text-align: center;
+    margin-top: 20px;
+  }
+</style>
 {% endblock %}
 

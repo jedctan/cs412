@@ -1,0 +1,10 @@
+{% extends 'project/base.html' %}
+{% block content %}
+  <h2>Your Profile</h2>
+  <img src="{{ profile.image_file.url }}" alt="Profile Picture" height="200">
+  <p><strong>Name:</strong> {{ profile.first_name }} {{ profile.last_name }}</p>
+  <p><strong>City:</strong> {{ profile.city }}</p>
+  <p><strong>Email:</strong> {{ profile.email }}</p>
+
+  <a href="{% url 'project_update_profile' profile.pk %}">Edit Profile</a>
+{% endblock %}

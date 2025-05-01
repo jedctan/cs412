@@ -1,0 +1,21 @@
+<!--
+File: rsvp_form.html
+Description: Template used to render the RSVP form for an event.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-30
+-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h2>RSVP to "{{ view.event.title }}"</h2>
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">RSVP</button>
+</form>
+
+<p><a href="{% url 'event_detail' view.event.pk %}">Cancel</a></p>
+{% endblock %}

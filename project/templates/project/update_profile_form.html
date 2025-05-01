@@ -1,0 +1,24 @@
+<!--
+File: update_profile_form.html
+Description: Template for editing a user's profile information.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-30
+-->
+
+{% extends 'project/base.html' %}
+{% block content %}
+
+<h2>Update Your Profile</h2>
+
+<!-- ensure to include enctype for images -->
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <table>
+    {{ form.as_table }}
+  </table>
+  <input type="submit" value="Update">
+  <a href="{% url 'project_show_profile' profile.pk %}">Cancel</a>
+</form>
+
+{% endblock %}

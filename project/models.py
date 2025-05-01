@@ -87,6 +87,7 @@ class Event(models.Model):
     date = models.DateTimeField(blank=False)
     outfit = models.ForeignKey('project.Outfit', on_delete=models.SET_NULL, null=True)
     location = models.TextField(blank=True)
+    description = models.TextField(blank=True)
 
     def __str__(self):
         '''Return a string representation of the event.'''
@@ -97,3 +98,32 @@ class Friendship(models.Model):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_user')
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_user')
     status = models.BooleanField(default=False) # True if accepted, False if not accepted
+
+class RSVP(models.Model):
+    '''Encapsulate the data for RSVPs to events.'''
+    # Captures the relationship between users, events, and outfits
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    outfit = models.ForeignKey(Outfit, on_delete=models.SET_NULL, null=True, blank=True)
+
+    class Meta:
+        unique_together = ('user', 'event')  # one outfit per user per event
+
+class Profile(models.Model):
+    '''Encapsulate the data for each created profile.'''
+
+    first_name = models.TextField(blank=False)
+    last_name = models.TextField(blank=False)
+    city = models.TextField(blank=False)
+    email = models.EmailField(blank=False)
+    image_file = models.ImageField(blank=True) # profile pic not required
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='proj_profile')
+
+    def __str__(self):
+        '''Return a string representation of this Profile object.'''
+        return f'{self.first_name} {self.last_name}'
+    
+    def get_absolute_url(self):
+        '''Return a URL to display one instance of this object.'''
+        return reverse('show_profile', kwargs={'pk': self.pk})

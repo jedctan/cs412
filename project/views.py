@@ -16,7 +16,25 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
 
 from django.shortcuts import render, redirect
-from .models import ClothingItem, Outfit
+from .models import *
+
+from django.contrib.auth.mixins import LoginRequiredMixin # for authentication    
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+
+# HELPER FUNCTIONS
+
+# utils.py (or inside views.py if short)
+from .models import Friendship
+
+def are_friends(user1, user2):
+    '''Check if two users are friends based on the model.'''
+    return Friendship.objects.filter(
+        from_user=user1, to_user=user2, status=True
+    ).exists() or Friendship.objects.filter(
+        from_user=user2, to_user=user1, status=True
+    ).exists()
+
 
 def create_outfit(request):
     '''Function-based view to create a custom form with image selection.'''
@@ -141,7 +159,7 @@ class CustomLoginRequiredMixin(LoginRequiredMixin):
     def get_login_url(self):
         '''Return the URL for this app's login page.'''
         # sends us to login screen if we try to create a profile when not logged in
-        return reverse('login')
+        return reverse('project_login')
 
 class ShowWardrobeView(CustomLoginRequiredMixin, ListView):
     '''Display all the clothing items.'''
@@ -330,3 +348,146 @@ class DeleteOutfitView(CustomLoginRequiredMixin, DeleteView):
         # create cancel URL with pk
         context['cancel_url'] = reverse('outfit_detail', kwargs={'pk': self.object.pk})
         return context
+    
+#  --------------------- EVENT VIEWS --------------------- # 
+
+class EventCreateView(CreateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'project/create_event.html'
+    
+    def get_success_url(self):
+        return reverse('event_list')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+    
+class EventListView(ListView):
+    '''Display a list of events for the user.'''
+
+    model = Event
+    template_name = 'project/event_list.html'
+    context_object_name = 'events'
+
+    def get_queryset(self):
+        '''Ordered events by the date field.'''
+        return Event.objects.order_by('date')
+    
+class EventDetailView(DetailView):
+    '''Display the details of a specific event.'''
+
+    model = Event
+    template_name = 'project/event_detail.html'
+    context_object_name = 'event'
+
+    def get_queryset(self):
+        # Later: restrict visibility to public or friends if needed
+        return Event.objects.all()
+    
+class RSVPCreateView(LoginRequiredMixin, CreateView):
+    model = RSVP
+    form_class = RSVPForm
+    template_name = 'project/rsvp_form.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        '''Check if user is friends with event creator or if they already rsvped.'''
+        # dispatch() is what is called first so these checks should be done immediately
+
+        self.event = Event.objects.get(pk=kwargs['pk'])
+
+        # only friends of the event creator may RSVP
+        if not are_friends(request.user, self.event.user):
+            # DO I NEED PK HERE?
+            return redirect('event_list')
+
+        # if a rsvp already exists for this user then redirect
+        if RSVP.objects.filter(user=request.user, event=self.event).exists():
+            return redirect('event_detail', pk=self.event.pk)
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        '''Add the user to the form kwargs so we can filter outfits.'''
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user  # For filtering outfits
+        return kwargs
+
+    def form_valid(self, form):
+        '''Process the form submission and save the RSVP.'''
+        # assign user and event
+        form.instance.user = self.request.user
+        form.instance.event = self.event
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        '''Return the URL to redirect to after successfully RSVPing.'''
+        return reverse('event_detail', kwargs={'pk': self.event.pk})
+
+class CreateProfileView(CreateView):
+    '''
+    A combined user + profile creation view. 
+    1. Displays UserCreationForm and CreateProfileForm.
+    2. Processes both on POST, logs in user, then redirects.
+    '''
+    model = Profile
+    form_class = CreateProfileForm
+    template_name = "project/create_profile_form.html" 
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # if the user put in an invalid password, we need to show the user creation form again
+        if 'user_form' not in context:
+
+            # add the user creation form to the context
+            context["user_form"] = UserCreationForm()
+
+        return context
+
+    def form_valid(self, form):
+        '''This method handles the form submission and saves the new object to the Django db. '''
+
+        # recontruct the user creation form
+        user_form = UserCreationForm(self.request.POST)
+
+        if user_form.is_valid():
+            # save the new user to db
+            user = user_form.save()
+
+            # log the user in
+            login(self.request, user)
+            
+            # attach the user to the profile
+            form.instance.user = user
+
+            return super().form_valid(form)
+        else:
+            # add the invalid form to the context and re-render the page
+            # this is so we can see errors from bad password input
+            return self.render_to_response(self.get_context_data(
+                form=form,
+                user_form=user_form
+            ))
+
+    def get_success_url(self):
+        return reverse("show_wardrobe")
+
+class ShowProfileView(LoginRequiredMixin, DetailView):
+    model = Profile
+    template_name = "project/show_profile.html"
+    context_object_name = "profile"
+
+class UpdateProfileView(CustomLoginRequiredMixin, UpdateView):
+    model = Profile
+    form_class = CreateProfileForm
+    template_name = "project/update_profile_form.html"
+    context_object_name = "profile"
+
+    def get_queryset(self):
+        '''Ensure users can only update their own profile.'''
+        return Profile.objects.filter(user=self.request.user)
+
+    def get_success_url(self):
+        '''Return the URL to redirect to after updating the profile.'''
+        return reverse('project_show_profile', kwargs={'pk': self.object.pk})

@@ -23,8 +23,18 @@ urlpatterns = [
     path('item/<int:pk>/delete/', DeleteClothingItemView.as_view(), name="delete_clothing_item"),
     path('outfit/<int:pk>/delete/', DeleteOutfitView.as_view(), name="delete_outfit"),
 
+    # events-related URLs
+    path('events/create/', EventCreateView.as_view(), name='create_event'),
+    path('events/', EventListView.as_view(), name='event_list'),
+    path('events/<int:pk>/', EventDetailView.as_view(), name='event_detail'),
+    path('events/<int:pk>/rsvp/', RSVPCreateView.as_view(), name='rsvp_event'),
+
+    # profile-related URLs
+    path('register/', CreateProfileView.as_view(), name='project_create_profile'),
+    path("profile/<int:pk>/", ShowProfileView.as_view(), name="project_show_profile"),
+    path("profile/<int:pk>/update/", UpdateProfileView.as_view(), name="project_update_profile"),
     # authorization-related URLs
-    path('login/', auth_views.LoginView.as_view(template_name='project/login.html'), name="project-login"),
-    path('logout/', auth_views.LogoutView.as_view(template_name='project/logged_out.html'), name="project-logout"),
+    path('login/', auth_views.LoginView.as_view(template_name='project/login.html'), name="project_login"),
+    path('logout/', auth_views.LogoutView.as_view(template_name='project/logged_out.html'), name="project_logout"),
 
 ]
