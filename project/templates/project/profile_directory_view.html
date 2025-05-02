@@ -1,0 +1,100 @@
+<!--
+File: profile_directory_view.html
+Description: Displays details for a single outfit.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-30
+-->
+
+{% extends 'project/base.html' %}
+
+{% block content %}
+
+<main>
+  <h2>Digidrobe Users</h2>
+
+
+  <div class="profile-grid">
+    {% for profile in profiles %}
+      <div class="profile-card">
+        <img src="{{ profile.image_file.url }}" alt="{{ profile.user.username }}'s picture" class="profile-thumbnail">
+        <strong>{{ profile.user.username }}</strong><br>
+
+        <a href="{% url 'project_show_profile' profile.pk %}" class="profile-link">View Profile</a><br>
+        
+        <!-- we pass in all the pks of non friends -->
+        {% if profile.pk not in friends_ids %}
+          <a href="{% url 'project_add_friend' profile.pk %}" class="friend-button">Friend</a>
+        {% else %}
+          <span class="already-friends">Already friends</span>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</main>
+
+<style>
+  .profile-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+  }
+
+  .profile-card {
+    width: 200px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+    background-color: #fdfdfd;
+  }
+
+  .profile-card:hover {
+    transform: scale(1.03);
+    box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .profile-thumbnail {
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+
+  .profile-link {
+    display: inline-block;
+    margin-top: 5px;
+    text-decoration: none;
+  }
+
+  .friend-button {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 10px;
+    border: 1px solid black;
+    border-radius: 6px;
+    text-decoration: none;
+    background-color: white;
+    color: black;
+    transition: background-color 0.2s ease;
+  }
+
+  .friend-button:hover {
+    background-color: black;
+    color: white;
+  }
+
+  /* green if friends */
+  .already-friends {
+    display: inline-block;
+    margin-top: 10px;
+    color: green;
+    font-weight: bold;
+  }
+</style>
+
+{% endblock %}

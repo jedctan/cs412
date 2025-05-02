@@ -51,6 +51,7 @@ class Outfit(models.Model):
     name = models.TextField(blank=False)
     created = models.DateTimeField(auto_now_add=True)
     notes = models.TextField(blank=True)
+    event = models.ForeignKey('Event', null=True, blank=True, on_delete=models.SET_NULL)
 
     SEASON_CHOICES = [
         ('fall_winter', 'Fall/Winter'),
@@ -85,7 +86,6 @@ class Event(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.TextField(blank=False)
     date = models.DateTimeField(blank=False)
-    outfit = models.ForeignKey('project.Outfit', on_delete=models.SET_NULL, null=True)
     location = models.TextField(blank=True)
     description = models.TextField(blank=True)
 
@@ -93,22 +93,14 @@ class Event(models.Model):
         '''Return a string representation of the event.'''
         return f"{self.title}"
 
-class Friendship(models.Model):
-    '''Encapsulate the data for friendships.'''
-    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_user')
-    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_user')
-    status = models.BooleanField(default=False) # True if accepted, False if not accepted
 
 class RSVP(models.Model):
     '''Encapsulate the data for RSVPs to events.'''
-    # Captures the relationship between users, events, and outfits
-
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    outfit = models.ForeignKey(Outfit, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
-        unique_together = ('user', 'event')  # one outfit per user per event
+        unique_together = ('user', 'event')  # No duplicates
 
 class Profile(models.Model):
     '''Encapsulate the data for each created profile.'''
@@ -127,3 +119,26 @@ class Profile(models.Model):
     def get_absolute_url(self):
         '''Return a URL to display one instance of this object.'''
         return reverse('show_profile', kwargs={'pk': self.pk})
+    
+    def add_friend(self, other):
+        '''Adds a mutual friendship between self and other. Returns True if added, False otherwise.'''
+        if self == other:
+            return False  # can't friend yourself
+
+        # check if the friendship already exists for either
+        exists = Friendship.objects.filter(from_user=self, to_user=other).exists() or Friendship.objects.filter(from_user=other, to_user=self).exists()
+
+        if exists:
+            return False
+
+        # create a friendship in both directions
+        Friendship.objects.create(from_user=self, to_user=other, status=True)
+        Friendship.objects.create(from_user=other, to_user=self, status=True)
+        return True
+
+
+class Friendship(models.Model):
+    '''Encapsulate the data for friendships.'''
+    from_user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile1')
+    to_user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile2')
+    status = models.BooleanField(default=False) # True if accepted, False if not accepted

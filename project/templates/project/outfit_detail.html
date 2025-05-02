@@ -36,6 +36,7 @@ Date Created: 2025-04-24
       {% if outfit.shoes %}
         <img src="{{ outfit.shoes.image_file.url }}" class="shoes" alt="Shoes">
       {% endif %}
+
     </div>
 
     <!-- labels for each piece -->
@@ -62,6 +63,13 @@ Date Created: 2025-04-24
 
       {% if outfit.notes %}
         <p class="outfit-notes"><strong>Notes:</strong> {{ outfit.notes }}</p>
+      {% endif %}
+
+      {% if outfit.event %}
+      <p>
+        <strong>Event:</strong>
+        <a href="{% url 'event_detail' outfit.event.pk %}">{{ outfit.event.title }}</a>
+      </p>
       {% endif %}
 
     </div>
@@ -131,7 +139,7 @@ Date Created: 2025-04-24
 
   .clothing-stack .hat {
     top: 10px;
-    height: 60px;
+    height: 50px;
     z-index: 4;
   }
 
@@ -148,7 +156,7 @@ Date Created: 2025-04-24
 
   .clothing-stack .bottoms {
     top: 200px;
-    height: 130px;
+    height: 150px;
     z-index: 2;
   }
 

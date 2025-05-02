@@ -1,3 +1,11 @@
+<!--
+File: event_list.html
+Description: Template for displaying a list of events with RSVP buttons.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-30
+-->
+
 {% extends 'project/base.html' %}
 
 {% block content %}
@@ -7,64 +15,104 @@
 
 <div class="event-card-grid">
   {% for event in events %}
-  <a href="{% url 'event_detail' event.pk %}" style="all: unset; display: block; cursor: pointer;">
     <div class="event-card">
-      <div class="event-header">{{ event.title }}</div>
-      <div class="event-meta">
-        {{ event.date|date:"M d, Y H:i" }} {% if event.location %} @ {{ event.location }}{% endif %}
-      </div>
-      <div class="event-description">
-        {{ event.description|linebreaks }}
+      <a href="{% url 'event_detail' event.pk %}" style="all: unset; display: block; cursor: pointer;">
+        <div class="event-header">{{ event.title }}</div>
+        <!-- creator of the event -->
+        <div class="event-poster">
+            Posted by: {{ event.user.proj_profile.first_name }} {{ event.user.proj_profile.last_name }}
+          </div>          
+        <div class="event-meta">
+          {{ event.date|date:"M d, Y H:i" }}{% if event.location %} @ {{ event.location }}{% endif %}
+        </div>
+        <div class="event-description">
+          {{ event.description|linebreaks }}
+        </div>
+      </a>
+
+      <div class="event-actions">
+        <form method="post" action="{% url 'toggle_rsvp' event.pk %}">
+          {% csrf_token %}
+          {% if event.id in rsvped_event_ids %}
+            <button type="submit" class="rsvp-button going">Un-RSVP</button>
+          {% else %}
+            <button type="submit" class="rsvp-button">RSVP</button>
+          {% endif %}
+        </form>
       </div>
     </div>
-  </a>  
   {% empty %}
     <p>No events scheduled.</p>
   {% endfor %}
 </div>
 
 <style>
-    .event-card-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-  
-    .event-card {
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 16px;
-      box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
-      background-color: #fff;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-  
-    .event-card:hover {
-      transform: scale(1.01);
-      box-shadow: 4px 6px 16px rgba(0, 0, 0, 0.15);
-    }
-  
-    .event-header {
-      font-size: 1.2em;
-      font-weight: bold;
-    }
-  
-    .event-meta {
-      font-size: 0.9em;
-      color: #666;
-      margin-top: 4px;
-    }
-  
-    .event-description {
-      margin-top: 10px;
-      font-size: 0.95em;
-    }
-  
-    .event-actions {
-      margin-top: 12px;
-    }
-  </style>
-  
+  .event-card-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .event-card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .event-card:hover {
+    transform: scale(1.01);
+    box-shadow: 4px 6px 16px rgba(0, 0, 0, 0.15);
+  }
+
+  .event-header {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+
+  .event-meta {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 4px;
+  }
+
+  .event-description {
+    margin-top: 10px;
+    font-size: 0.95em;
+  }
+
+  .event-actions {
+    margin-top: 12px;
+  }
+
+  .rsvp-button {
+    padding: 6px 12px;
+    font-size: 0.9em;
+    border: 1px solid black;
+    border-radius: 6px;
+    background-color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .rsvp-button:hover {
+    background-color: black;
+    color: white;
+  }
+
+  .going {
+    border-color: green;
+    color: green;
+  }
+
+  .going:hover {
+    background-color: green;
+    color: white;
+  }
+</style>
+
 {% endblock %}

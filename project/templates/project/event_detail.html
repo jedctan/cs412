@@ -22,6 +22,49 @@ Date Created: 2025-04-30
     </div>
   {% endif %}
 
+  <!-- if the user's outfit exists then display -->
+  {% if user_outfit %}
+  <a href="{% url 'outfit_detail' user_outfit.pk %}" style="all: unset; display: block; cursor: pointer;">
+    <div class="assigned-outfit">
+      <p><strong>{{ user_outfit.name }}</strong></p>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            {% if user_outfit.hat %}<img src="{{ user_outfit.hat.image_file.url }}" height="80">{% endif %}
+            {% if user_outfit.jacket %}<img src="{{ user_outfit.jacket.image_file.url }}" height="80">{% endif %}
+            {% if user_outfit.shirt %}<img src="{{ user_outfit.shirt.image_file.url }}" height="80">{% endif %}
+            {% if user_outfit.bottoms %}<img src="{{ user_outfit.bottoms.image_file.url }}" height="80">{% endif %}
+            {% if user_outfit.shoes %}<img src="{{ user_outfit.shoes.image_file.url }}" height="80">{% endif %}
+        </div>
+    </div>
+    </a>
+    {% endif %}
+  
+    <!-- all users that rsvped -->
+    <!-- show outfit if they specified one -->
+    {% if rsvp_outfits %}
+    <div class="rsvp-list" style="margin-top: 20px;">
+      <h4>People going & what they're wearing:</h4>
+      <ul style="list-style: none; padding: 0;">
+        {% for user, outfit in rsvp_outfits.items %}
+          <li style="margin-bottom: 20px;">
+            <strong>{{ user.proj_profile.first_name }} {{ user.proj_profile.last_name }}</strong><br>
+            {% if outfit %}
+              <div style="display: flex; gap: 6px; margin-top: 6px;">
+                {% if outfit.hat %}<img src="{{ outfit.hat.image_file.url }}" height="40">{% endif %}
+                {% if outfit.jacket %}<img src="{{ outfit.jacket.image_file.url }}" height="40">{% endif %}
+                {% if outfit.shirt %}<img src="{{ outfit.shirt.image_file.url }}" height="40">{% endif %}
+                {% if outfit.bottoms %}<img src="{{ outfit.bottoms.image_file.url }}" height="40">{% endif %}
+                {% if outfit.shoes %}<img src="{{ outfit.shoes.image_file.url }}" height="40">{% endif %}
+              </div>
+            {% else %}
+              <em>No outfit assigned</em>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+
   <p><a href="{% url 'event_list' %}">Back to Events</a></p>
 </div>
 

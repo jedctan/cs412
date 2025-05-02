@@ -9,7 +9,7 @@ from django.shortcuts import render
 
 # Create your views here.
 
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView, View
 from .models import ClothingItem
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -21,20 +21,6 @@ from .models import *
 from django.contrib.auth.mixins import LoginRequiredMixin # for authentication    
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
-
-# HELPER FUNCTIONS
-
-# utils.py (or inside views.py if short)
-from .models import Friendship
-
-def are_friends(user1, user2):
-    '''Check if two users are friends based on the model.'''
-    return Friendship.objects.filter(
-        from_user=user1, to_user=user2, status=True
-    ).exists() or Friendship.objects.filter(
-        from_user=user2, to_user=user1, status=True
-    ).exists()
-
 
 def create_outfit(request):
     '''Function-based view to create a custom form with image selection.'''
@@ -50,6 +36,10 @@ def create_outfit(request):
         name = request.POST.get('name')
         notes = request.POST.get('notes')
         hat_id = request.POST.get('hat')
+        event_id = request.POST.get('event')
+        season = request.POST.get('season')
+        occasion = request.POST.get('occasion')
+
         jacket_id = request.POST.get('jacket')
         shirt_id = request.POST.get('shirt')
         bottoms_id = request.POST.get('bottoms')
@@ -61,6 +51,7 @@ def create_outfit(request):
         shirt = ClothingItem.objects.filter(id=shirt_id).first() if shirt_id else None
         bottoms = ClothingItem.objects.filter(id=bottoms_id).first() if bottoms_id else None
         shoes = ClothingItem.objects.filter(id=shoes_id).first() if shoes_id else None
+        event = Event.objects.filter(id=event_id).first() if event_id else None
 
         # create the outfit with the selected clothing items
         Outfit.objects.create(
@@ -71,8 +62,12 @@ def create_outfit(request):
             jacket=jacket,
             shirt=shirt,
             bottoms=bottoms,
-            shoes=shoes
+            shoes=shoes,
+            event=event,
+            season=season,
+            occasion=occasion,
         )
+
         # redirect to the outfit list page after creating the outfit
         return redirect('outfit_list') 
 
@@ -85,16 +80,22 @@ def create_outfit(request):
     bottoms = ClothingItem.objects.filter(category='bottom', user=request.user)
     shoes = ClothingItem.objects.filter(category='shoes', user=request.user)
 
+    # get events the user RSVPed to, but hasn't used in any outfit yet
+    assigned_event_ids = Outfit.objects.filter(user=request.user, event__isnull=False).values_list('event_id', flat=True)
+    rsvp_events = Event.objects.filter(rsvp__user=request.user).exclude(id__in=assigned_event_ids)
+
     # loads template, adds all of the clothing items, returns the response
     return render(request, 'project/create_outfit_custom.html', {
         'hats': hats,
         'jackets': jackets,
         'shirts': shirts,
         'bottoms': bottoms,
-        'shoes': shoes
+        'shoes': shoes,
+        'rsvp_events': rsvp_events,
+        'seasons': Outfit.SEASON_CHOICES,
+        'occasions': Outfit.OCCASION_CHOICES,
     })
 
-from django.shortcuts import get_object_or_404
 
 def edit_outfit_custom(request, pk):
     '''Function-based view to edit an existing outfit using visual selection.'''
@@ -119,6 +120,7 @@ def edit_outfit_custom(request, pk):
         shirt_id = request.POST.get('shirt')
         bottoms_id = request.POST.get('bottoms')
         shoes_id = request.POST.get('shoes')
+        event_id = request.POST.get('event')
 
         # update the outfit's clothing items based on the selected IDs
         outfit.hat = ClothingItem.objects.filter(id=hat_id).first() if hat_id else None
@@ -126,6 +128,7 @@ def edit_outfit_custom(request, pk):
         outfit.shirt = ClothingItem.objects.filter(id=shirt_id).first() if shirt_id else None
         outfit.bottoms = ClothingItem.objects.filter(id=bottoms_id).first() if bottoms_id else None
         outfit.shoes = ClothingItem.objects.filter(id=shoes_id).first() if shoes_id else None
+        outfit.event = Event.objects.filter(id=event_id).first() if event_id else None
         
         # save to db
         outfit.save()
@@ -142,6 +145,9 @@ def edit_outfit_custom(request, pk):
     bottoms = ClothingItem.objects.filter(category='bottom', user=request.user)
     shoes = ClothingItem.objects.filter(category='shoes', user=request.user)
 
+    # get all RSVP events for the user
+    assigned_event_ids = Outfit.objects.filter(user=request.user, event__isnull=False).exclude(pk=outfit.pk).values_list('event_id', flat=True)
+    rsvp_events = Event.objects.filter(rsvp__user=request.user).exclude(id__in=assigned_event_ids)
 
     # loads template, adds the outfit and all of the clothing items, returns the response
     return render(request, 'project/update_outfit_custom.html', {
@@ -151,6 +157,7 @@ def edit_outfit_custom(request, pk):
         'shirts': shirts,
         'bottoms': bottoms,
         'shoes': shoes,
+        'rsvp_events': rsvp_events,
     })
 
 class CustomLoginRequiredMixin(LoginRequiredMixin):
@@ -349,8 +356,6 @@ class DeleteOutfitView(CustomLoginRequiredMixin, DeleteView):
         context['cancel_url'] = reverse('outfit_detail', kwargs={'pk': self.object.pk})
         return context
     
-#  --------------------- EVENT VIEWS --------------------- # 
-
 class EventCreateView(CreateView):
     model = Event
     form_class = EventForm
@@ -363,67 +368,57 @@ class EventCreateView(CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
     
-class EventListView(ListView):
-    '''Display a list of events for the user.'''
-
+class EventListView(LoginRequiredMixin, ListView):
     model = Event
     template_name = 'project/event_list.html'
     context_object_name = 'events'
 
     def get_queryset(self):
-        '''Ordered events by the date field.'''
-        return Event.objects.order_by('date')
-    
-class EventDetailView(DetailView):
-    '''Display the details of a specific event.'''
+        my_profile = self.request.user.proj_profile
+        friend_ids = Friendship.objects.filter(
+            from_user=my_profile
+        ).values_list('to_user__user__id', flat=True)
 
+        # all events where the user is either the current user or a friend
+        return Event.objects.filter(
+            models.Q(user__id__in=friend_ids) | models.Q(user=self.request.user)).order_by('date')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rsvp_ids = RSVP.objects.filter(user=self.request.user).values_list('event_id', flat=True)
+        context['rsvped_event_ids'] = set(rsvp_ids)
+        return context
+
+
+class EventDetailView(DetailView):
+    '''Display the details of an event.'''
     model = Event
     template_name = 'project/event_detail.html'
     context_object_name = 'event'
 
-    def get_queryset(self):
-        # Later: restrict visibility to public or friends if needed
-        return Event.objects.all()
+    # get outfit for this user for this event
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        event = self.get_object()
+        current_user = self.request.user
+
+        # current user outfit
+        user_outfit = Outfit.objects.filter(user=current_user, event=event).first()
+        context['user_outfit'] = user_outfit
+
+        # get all RSVPed users except the one currently viewing the page
+        rsvped_users = User.objects.filter(rsvp__event=event).exclude(id=current_user.id).distinct()
+
+        # map RSVPed users to their outfit
+        outfits_by_user = {
+            user: Outfit.objects.filter(user=user, event=event).first()
+            for user in rsvped_users
+        }
+        context['rsvp_outfits'] = outfits_by_user
+
+        return context
+
     
-class RSVPCreateView(LoginRequiredMixin, CreateView):
-    model = RSVP
-    form_class = RSVPForm
-    template_name = 'project/rsvp_form.html'
-
-    def dispatch(self, request, *args, **kwargs):
-        '''Check if user is friends with event creator or if they already rsvped.'''
-        # dispatch() is what is called first so these checks should be done immediately
-
-        self.event = Event.objects.get(pk=kwargs['pk'])
-
-        # only friends of the event creator may RSVP
-        if not are_friends(request.user, self.event.user):
-            # DO I NEED PK HERE?
-            return redirect('event_list')
-
-        # if a rsvp already exists for this user then redirect
-        if RSVP.objects.filter(user=request.user, event=self.event).exists():
-            return redirect('event_detail', pk=self.event.pk)
-
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_form_kwargs(self):
-        '''Add the user to the form kwargs so we can filter outfits.'''
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user  # For filtering outfits
-        return kwargs
-
-    def form_valid(self, form):
-        '''Process the form submission and save the RSVP.'''
-        # assign user and event
-        form.instance.user = self.request.user
-        form.instance.event = self.event
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        '''Return the URL to redirect to after successfully RSVPing.'''
-        return reverse('event_detail', kwargs={'pk': self.event.pk})
-
 class CreateProfileView(CreateView):
     '''
     A combined user + profile creation view. 
@@ -474,11 +469,13 @@ class CreateProfileView(CreateView):
         return reverse("show_wardrobe")
 
 class ShowProfileView(LoginRequiredMixin, DetailView):
+    '''View to display a user's profile.'''
     model = Profile
     template_name = "project/show_profile.html"
     context_object_name = "profile"
 
 class UpdateProfileView(CustomLoginRequiredMixin, UpdateView):
+    '''View to update a user's profile.'''
     model = Profile
     form_class = CreateProfileForm
     template_name = "project/update_profile_form.html"
@@ -491,3 +488,73 @@ class UpdateProfileView(CustomLoginRequiredMixin, UpdateView):
     def get_success_url(self):
         '''Return the URL to redirect to after updating the profile.'''
         return reverse('project_show_profile', kwargs={'pk': self.object.pk})
+
+class ProfileDirectoryView(CustomLoginRequiredMixin, ListView):
+    '''View to display a directory of all profiles except the current user.'''
+    model = Profile
+    template_name = "project/profile_directory_view.html"
+    context_object_name = "profiles"
+
+    # returns all profiles except the current user's profile
+    def get_queryset(self):
+        return Profile.objects.exclude(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # get the current user's profile
+        my_profile = self.request.user.proj_profile
+
+        # find all friendships where the user's profiles pk is present, then get the ids of the friends then get the PKs of those
+        friends_ids = Profile.objects.filter(pk__in=Friendship.objects.filter(from_user=my_profile).values_list('to_user', flat=True)).values_list('pk', flat=True)
+
+        # convert to Python set for dupes
+        context['friends_ids'] = set(friends_ids)
+        return context
+
+class CreateFriendView(CustomLoginRequiredMixin, View):
+    '''View class to handle the creation of Friend relations.'''
+
+    def get_object(self):
+        '''Returns Profile corresponding to the signed in user.'''
+        profiles = Profile.objects.filter(user=self.request.user)
+        # since admin is associated with multiple profiles, we will return the first no matter what
+        return profiles[0]
+
+    def dispatch(self, request, *args, **kwargs):
+        ''''Set up friendship creation.'''
+        
+        # from the request get the 2 primary keys
+        pk1 = self.get_object().pk
+        pk2 = self.kwargs['other_pk']
+
+        profile1 = Profile.objects.get(pk=pk1)
+        profile2 = Profile.objects.get(pk=pk2)
+
+        profile1.add_friend(profile2)
+        
+        return redirect(reverse('project_show_profile', kwargs={'pk': profile2.pk}))
+
+class ToggleRSVPView(CustomLoginRequiredMixin, View):
+    '''View to toggle RSVP status for an event.'''
+    
+    def post(self, request, *args, **kwargs):
+        '''Post since we are always changing the state of the RSVP.'''
+        # get event with pk
+        event = Event.objects.get(pk=kwargs['pk'])
+
+        # check if RSVP exists
+        rsvp = RSVP.objects.filter(user=request.user, event=event).first()
+
+        if rsvp:
+            # Clear outfit.event link
+            Outfit.objects.filter(user=request.user, event=event).update(event=None)
+
+            # Delete the RSVP
+            rsvp.delete()
+        else:
+            # if no rsvp exists, create one
+            RSVP.objects.create(user=request.user, event=event)
+
+        return redirect('event_list')
+

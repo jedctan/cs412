@@ -1,10 +1,27 @@
+<!--
+File: show_profile.html
+Description: Template for displaying a user's profile information.
+Author: Jed Tan
+Email: jctan@bu.edu
+Date Created: 2025-04-29
+-->
+
 {% extends 'project/base.html' %}
+
 {% block content %}
   <h2>Your Profile</h2>
+
   <img src="{{ profile.image_file.url }}" alt="Profile Picture" height="200">
+
   <p><strong>Name:</strong> {{ profile.first_name }} {{ profile.last_name }}</p>
   <p><strong>City:</strong> {{ profile.city }}</p>
   <p><strong>Email:</strong> {{ profile.email }}</p>
 
-  <a href="{% url 'project_update_profile' profile.pk %}">Edit Profile</a>
+  <!-- only if the user is viewing their own profile -->
+    {% if profile.user == request.user %}
+    <a href="{% url 'project_update_profile' profile.pk %}">Edit Profile</a>
+    {% else %}
+    <a href="{% url 'profile_directory' %}">Back</a>
+    {% endif %}
+
 {% endblock %}

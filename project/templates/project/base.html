@@ -27,6 +27,8 @@ Date Created: 2025-04-14
 
                 <a href="{% url 'event_list' %}">Events</a> |
 
+                <a href="{% url 'profile_directory' %}">Profiles</a> |
+
                 <!-- logout doesn't work with GET (so can't use anchor tag), must create form with POST -->
                 <form action="{% url 'project_logout' %}" method="POST" class="logout-form">
                     {% csrf_token %}

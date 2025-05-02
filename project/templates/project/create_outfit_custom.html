@@ -18,7 +18,34 @@ Date Created: 2025-04-15
   
     <label>Notes:</label><br>
     <textarea name="notes"></textarea><br><br>
-  
+
+    <label>Season:</label>
+    <select name="season">
+      <option value="">-- Select a season --</option>
+      {% for value, label in seasons %}
+        <option value="{{ value }}">{{ label }}</option>
+      {% endfor %}
+    </select>
+    <br><br>
+
+    <label>Occasion:</label>
+    <select name="occasion">
+      <option value="">-- Select an occasion --</option>
+      {% for value, label in occasions %}
+        <option value="{{ value }}">{{ label }}</option>
+      {% endfor %}
+    </select>
+    <br><br>
+
+    <label for="event">Assign to Event:</label>
+    <select name="event" id="event">
+      <option value="">-- Select an event --</option>
+      {% for event in rsvp_events %}
+        <option value="{{ event.id }}">{{ event.title }} - {{ event.date|date:"M d" }}</option>
+      {% endfor %}
+    </select>
+    <br><br>
+
     <label>Hat:</label><br>
     {% for item in hats %}
       <label style="display:inline-block; text-align:center; margin:10px;">
@@ -81,7 +108,9 @@ Date Created: 2025-04-15
     <br><br>
     <input type="hidden" name="form_type" value="create_outfit">
     <button type="submit">Create Outfit</button>
+    <a href="{% url 'show_wardrobe' %}" class="cancel-button">Cancel</a>
 
+    
   </form>
 
 {% endblock %}

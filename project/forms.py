@@ -46,18 +46,6 @@ class EventForm(forms.ModelForm):
             super().__init__(*args, **kwargs)
             self.fields['date'].input_formats = ['%Y-%m-%dT%H:%M']
 
-class RSVPForm(forms.ModelForm):
-    '''Form to RSVP to an event with a selected outfit.'''
-    class Meta:
-        model = RSVP
-        fields = ['outfit']
-
-    def __init__(self, *args, user=None, **kwargs):
-        super().__init__(*args, **kwargs)
-        # ensure outfits are for that user
-        if user:
-            self.fields['outfit'].queryset = Outfit.objects.filter(user=user)
-
 class CreateProfileForm(forms.ModelForm):
     '''A form to add a Profile to the database.'''
 

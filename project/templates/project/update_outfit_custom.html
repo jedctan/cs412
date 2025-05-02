@@ -40,6 +40,17 @@ Date Created: 2025-04-30
     </select>
     <br><br>
 
+    <label for="event">Assigned Event:</label>
+    <select name="event" id="event">
+      <option value="">-- No event --</option>
+      {% for event in rsvp_events %}
+        <option value="{{ event.id }}" {% if outfit.event and outfit.event.id == event.id %}selected{% endif %}>
+          {{ event.title }} - {{ event.date|date:"M d" }}
+        </option>
+      {% endfor %}
+    </select>
+    <br><br>
+
     <!-- for each iteam display all images in a radio select -->
     <label>Hat:</label><br>
     {% for item in hats %}
